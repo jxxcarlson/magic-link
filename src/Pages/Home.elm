@@ -1,14 +1,9 @@
 module Pages.Home exposing (view)
 
 import Element exposing (Element)
-import Element.Font
-import Html.Attributes
 import MarkdownThemed
 import Theme
-import Time
 import Types exposing (FrontendMsg(..), LoadedModel)
-import View.CustomElement
-import View.Input
 
 
 view : LoadedModel -> Element FrontendMsg

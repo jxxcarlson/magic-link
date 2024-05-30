@@ -89,7 +89,7 @@ signInWithTokenResponseC signInData =
         Cmd.none
 
 
-signOut : { a | showTooltip : Bool, signinForm : SigninForm, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.LoginData, currentUser : Maybe c, realname : String, username : String, email : String, password : String, passwordConfirmation : String, signInState : SignInState, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String, language : String, inputCity : String } -> ( { a | showTooltip : Bool, signinForm : SigninForm, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.LoginData, currentUser : Maybe c, realname : String, username : String, email : String, password : String, passwordConfirmation : String, signInState : SignInState, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String, language : String, inputCity : String }, Cmd frontendMsg )
+signOut : { a | showTooltip : Bool, signinForm : SigninForm, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.LoginData, currentUser : Maybe c, realname : String, username : String, email : String, signInState : SignInState, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String } -> ( { a | showTooltip : Bool, signinForm : SigninForm, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.LoginData, currentUser : Maybe c, realname : String, username : String, email : String, signInState : SignInState, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String }, Cmd frontendMsg )
 signOut model =
     ( { model
         | showTooltip = False
@@ -105,8 +105,6 @@ signOut model =
         , realname = ""
         , username = ""
         , email = ""
-        , password = ""
-        , passwordConfirmation = ""
         , signInState = SignedOut
 
         -- ADMIN
@@ -115,10 +113,6 @@ signOut model =
         --
         , backendModel = Nothing
         , message = ""
-
-        -- EXAMPLES
-        , language = "en-US"
-        , inputCity = ""
       }
     , Cmd.none
     )

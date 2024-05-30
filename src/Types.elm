@@ -63,8 +63,6 @@ type alias LoadedModel =
     , realname : String
     , username : String
     , email : String
-    , password : String
-    , passwordConfirmation : String
 
     -- ADMIN
     , adminDisplay : AdminDisplay
@@ -73,10 +71,6 @@ type alias LoadedModel =
     --
     , route : Route
     , message : String
-
-    -- EXAMPLES
-    , language : String -- Internationalization of date custom element
-    , inputCity : String
     }
 
 
@@ -132,9 +126,6 @@ type FrontendMsg
     | SetAdminDisplay AdminDisplay
       --
     | SetViewport
-      -- EXAMPLES
-    | LanguageChanged String -- for internationalization of date
-    | InputCity String
 
 
 type ToBackend

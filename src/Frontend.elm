@@ -114,8 +114,6 @@ tryLoading loadingModel =
                         , realname = ""
                         , username = ""
                         , email = ""
-                        , password = ""
-                        , passwordConfirmation = ""
                         , signInState = SignedOut
 
                         -- ADMIN
@@ -125,10 +123,6 @@ tryLoading loadingModel =
                         , route = loadingModel.route
                         , backendModel = Nothing
                         , message = "Starting up ..."
-
-                        -- EXAMPLES
-                        , language = "en-US"
-                        , inputCity = ""
                         }
                     , Cmd.none
                     )
@@ -173,23 +167,11 @@ updateLoaded msg model =
         MouseDown ->
             ( { model | showTooltip = False }, Cmd.none )
 
-        -- MAGICLINK
-        -- ADMIN
         SetAdminDisplay adminDisplay ->
             ( { model | adminDisplay = adminDisplay }, Cmd.none )
 
-        -- CUSTOM ELEMENT EXAMPLES
-        LanguageChanged language ->
-            ( { model | language = language }
-            , Cmd.none
-            )
-
-        -- /STRIPE
         SetViewport ->
             ( model, Cmd.none )
-
-        InputCity str ->
-            ( { model | inputCity = str }, Cmd.none )
 
 
 scrollToTop : Cmd FrontendMsg
