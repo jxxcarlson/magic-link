@@ -30,7 +30,7 @@ content =
 # Magic Link Authentication
 
 This is app demonstrates magic link authentication for Lamdera apps.
-The repo is at  [github.com/jxxcarlson/kitchen-sink](https://github.com/jxxcarlson/kitchen-sink).
+The repo is at  [github.com/jxxcarlson/magic-link](https://github.com/jxxcarlson/magic-link).
 
 
 
