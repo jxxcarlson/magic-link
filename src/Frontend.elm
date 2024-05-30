@@ -174,15 +174,6 @@ updateLoaded msg model =
             ( { model | showTooltip = False }, Cmd.none )
 
         -- MAGICLINK
-        InputRealname str ->
-            ( { model | realname = str }, Cmd.none )
-
-        InputUsername str ->
-            ( { model | username = str }, Cmd.none )
-
-        InputEmail str ->
-            ( { model | email = str }, Cmd.none )
-
         -- ADMIN
         SetAdminDisplay adminDisplay ->
             ( { model | adminDisplay = adminDisplay }, Cmd.none )

@@ -26,6 +26,9 @@ type FrontendMsg
     | TypedEmailInSignInForm String
     | SubmitSignUp
     | SignOut
+    | InputRealname String
+    | InputUsername String
+    | InputEmail String
 
 
 type SigninForm

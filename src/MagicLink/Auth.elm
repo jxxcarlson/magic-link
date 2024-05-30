@@ -52,6 +52,15 @@ updateFrontend msg model =
         MagicLink.Types.SignOut ->
             MagicLink.Frontend.signOut model
 
+        MagicLink.Types.InputRealname str ->
+            ( { model | realname = str }, Cmd.none )
+
+        MagicLink.Types.InputUsername str ->
+            ( { model | username = str }, Cmd.none )
+
+        MagicLink.Types.InputEmail str ->
+            ( { model | email = str }, Cmd.none )
+
 
 updateFromBackend :
     Auth.Common.ToFrontend

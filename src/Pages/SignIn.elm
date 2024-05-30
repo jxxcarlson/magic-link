@@ -72,9 +72,9 @@ signUp : LoadedModel -> Element FrontendMsg
 signUp model =
     Element.column [ Element.spacing 18, topPadding ]
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign up")
-        , View.Input.template "Real Name" model.realname InputRealname
-        , View.Input.template "User Name" model.username InputUsername
-        , View.Input.template "Email" model.email InputEmail
+        , View.Input.template "Real Name" model.realname (AuthFrontendMsg << MagicLink.Types.InputRealname)
+        , View.Input.template "User Name" model.username (AuthFrontendMsg << MagicLink.Types.InputUsername)
+        , View.Input.template "Email" model.email (AuthFrontendMsg << MagicLink.Types.InputEmail)
         , Element.row [ Element.spacing 18 ]
             [ View.Button.signUp
             , View.Button.cancelSignUp

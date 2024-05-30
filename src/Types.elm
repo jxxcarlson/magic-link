@@ -128,10 +128,6 @@ type FrontendMsg
     | MouseDown
       -- MAGICLINK
     | AuthFrontendMsg MagicLink.Types.FrontendMsg
-      --
-    | InputRealname String
-    | InputUsername String
-    | InputEmail String
       -- ADMIN
     | SetAdminDisplay AdminDisplay
       --
