@@ -1,0 +1,12 @@
+.DS_Store
+elm-stuff
+.idea
+openEditor.bat
+cloc.txt
+
+data/*
+token-code/
+
+
+# TEMPORARY
+src/Config.elm
