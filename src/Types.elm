@@ -142,7 +142,6 @@ type ToBackend
 type BackendMsg
     = NoOpBackendMsg
     | GotFastTick Time.Posix
-    | BackendGotTime SessionId ClientId ToBackend Time.Posix
     | OnConnected SessionId ClientId
     | GotAtmosphericRandomNumbers (Result Http.Error String)
       -- MAGICLINK

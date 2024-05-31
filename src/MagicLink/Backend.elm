@@ -107,6 +107,7 @@ requestSignUp model clientId fullname username email =
                             , id = LocalUUID.extractUUIDAsString uuidData
                             , roles = [ User.UserRole ]
                             , recentLoginEmails = []
+                            , verified = Nothing
                             }
                     in
                     ( { model
@@ -138,7 +139,7 @@ handleExistingSession : BackendModel -> String -> SessionId -> ClientId -> Int -
 handleExistingSession model username sessionId clientId magicToken =
     case getUserWithUsername model username of
         Just user ->
-            ( model
+            ( { model | users = User.setAsVerified model.time user model.users }
             , Cmd.batch
                 [ Lamdera.sendToFrontend sessionId
                     (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse (Ok <| User.loginDataOfUser user))
@@ -166,6 +167,7 @@ handleNoSession model time sessionId clientId magicToken =
                             ( { model
                                 | sessionDict = AssocList.insert sessionId userId model.sessionDict
                                 , pendingLogins = AssocList.remove sessionId model.pendingLogins
+                                , users = User.setAsVerified model.time user model.users
                               }
                             , User.loginDataOfUser user
                                 |> Ok
@@ -244,6 +246,7 @@ addUser2 model clientId emailString emailAddress realname username =
                     , id = LocalUUID.extractUUIDAsString uuidData
                     , roles = [ User.UserRole ]
                     , recentLoginEmails = []
+                    , verified = Nothing
                     }
             in
             ( { model

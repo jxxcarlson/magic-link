@@ -70,11 +70,6 @@ update msg model =
         NoOpBackendMsg ->
             ( model, Cmd.none )
 
-        Types.BackendGotTime sessionId clientId toBackend time ->
-            -- TODO
-            -- updateFromFrontendWithTime time sessionId clientId toBackend model
-            ( model, Cmd.none )
-
         GotAtmosphericRandomNumbers tryRandomAtmosphericNumbers ->
             let
                 ( numbers, data_ ) =
@@ -131,13 +126,10 @@ update msg model =
             , Cmd.batch
                 [ Helper.getAtmosphericRandomNumbers
                 , Backend.Session.reconnect model sessionId clientId
-
-                ---, Lamdera.sendToFrontend sessionId (GotMessage "Connected")
                 , case AssocList.get sessionId model.sessionDict of
                     Just username ->
                         case Dict.get username model.users of
                             Just user ->
-                                -- Lamdera.sendToFrontend sessionId (LoginWithTokenResponse <| Ok <| Debug.log "@##! send loginDATA" <| User.loginDataOfUser user)
                                 Process.sleep 60 |> Task.perform (always (AutoLogin sessionId (User.loginDataOfUser user)))
 
                             Nothing ->

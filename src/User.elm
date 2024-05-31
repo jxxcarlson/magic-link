@@ -6,8 +6,10 @@ module User exposing
     , User
     , Username
     , loginDataOfUser
+    , setAsVerified
     )
 
+import Dict
 import EmailAddress exposing (EmailAddress)
 import Time
 
@@ -21,8 +23,24 @@ type alias User =
     , created_at : Time.Posix
     , updated_at : Time.Posix
     , roles : List Role
+    , verified : Maybe Time.Posix
     , recentLoginEmails : List Time.Posix
     }
+
+
+verifyNow : Time.Posix -> User -> User
+verifyNow now user =
+    case user.verified of
+        Just _ ->
+            user
+
+        Nothing ->
+            { user | verified = Just now }
+
+
+setAsVerified : Time.Posix -> User -> Dict.Dict EmailString User -> Dict.Dict EmailString User
+setAsVerified now user users =
+    Dict.insert user.emailString (verifyNow now user) users
 
 
 type alias Username =

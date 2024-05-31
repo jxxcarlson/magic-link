@@ -37,8 +37,9 @@ testUserDictionary =
             , id = "661b76d8-eee8-42fb-a28d-cf8ada73f869"
             , created_at = Time.millisToPosix 1704237963000
             , updated_at = Time.millisToPosix 1704237963000
-            , roles = [ User.AdminRole ]
+            , roles = [ User.AdminRole, User.UserRole ]
             , recentLoginEmails = []
+            , verified = Nothing
             }
           )
         , ( "jxxcarlson@mac.com"
@@ -51,6 +52,7 @@ testUserDictionary =
             , updated_at = Time.millisToPosix 1704237963000
             , roles = [ User.UserRole ]
             , recentLoginEmails = []
+            , verified = Nothing
             }
           )
         ]

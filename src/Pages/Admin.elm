@@ -115,6 +115,12 @@ viewUser =
             , text ("username: " ++ user.username)
             , text ("email: " ++ EmailAddress.toString user.email)
             , text ("id: " ++ user.id)
+            , case user.verified of
+                Nothing ->
+                    text "not verified"
+
+                Just _ ->
+                    text "verified"
             ]
 
 
