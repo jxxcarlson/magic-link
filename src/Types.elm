@@ -97,14 +97,7 @@ type alias BackendModel =
     , sessions : Dict SessionId Auth.Common.UserInfo
     , secretCounter : Int
     , sessionDict : AssocList.Dict SessionId String -- Dict sessionId usernames
-    , pendingLogins :
-        AssocList.Dict
-            SessionId
-            { loginAttempts : Int
-            , emailAddress : EmailAddress
-            , creationTime : Time.Posix
-            , loginCode : Int
-            }
+    , pendingLogins : MagicLink.Types.PendingLogins
     , log : MagicLink.Types.Log
     , users : Dict.Dict User.EmailString User.User
     , userNameToEmailString : Dict.Dict User.Username User.EmailString

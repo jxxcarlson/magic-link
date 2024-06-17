@@ -1,60 +1,42 @@
-module ReviewConfig exposing (config)
 
-{-| Do not rename the ReviewConfig module or the config function, because
-`elm-review` will look for these.
-
-To add packages that contain rules, add them to this review project using
-
-    `elm install author/packagename`
-
-when inside the directory containing this file.
-
--}
-
-import Docs.ReviewAtDocs
-import NoConfusingPrefixOperator
-import NoDebug.Log
-import NoDebug.TodoOrToString
-import NoExposingEverything
-import NoImportingEverything
-import NoMissingTypeAnnotation
-import NoMissingTypeAnnotationInLetIn
-import NoMissingTypeExpose
-import NoPrematureLetComputation
-import NoSimpleLetBody
-import NoUnused.CustomTypeConstructorArgs
-import NoUnused.CustomTypeConstructors
-import NoUnused.Dependencies
-import NoUnused.Exports
-import NoUnused.Parameters
-import NoUnused.Patterns
-import NoUnused.Variables
-import Review.Rule as Rule exposing (Rule)
-import Simplify
+import Install.ClauseInCase
+import Install.FieldInTypeAlias
+import Install.Function
+import Install.Initializer
+import Install.TypeVariant
+import Review.Rule exposing (Rule)
 
 
 config : List Rule
 config =
-    [ --Docs.ReviewAtDocs.rule
-      --, NoConfusingPrefixOperator.rule
-    --  NoDebug.Log.rule
-    --, NoDebug.TodoOrToString.rule
-    --    |> Rule.ignoreErrorsForDirectories [ "tests/" ]
-     NoExposingEverything.rule
-    --, NoImportingEverything.rule []
-
-    --, NoMissingTypeAnnotation.rule
-    --, NoMissingTypeAnnotationInLetIn.rule
-    --, NoMissingTypeExpose.rule
-    --, NoSimpleLetBody.rule
-    --, NoPrematureLetComputation.rule
-    --, NoUnused.CustomTypeConstructors.rule []
-    --, NoUnused.CustomTypeConstructorArgs.rule
-    , NoUnused.Dependencies.rule
-    , NoUnused.Exports.rule
-
-    --, NoUnused.Parameters.rule
-    --, NoUnused.Patterns.rule
-    , NoUnused.Variables.rule
-    --, Simplify.rule Simplify.defaults
+    [ Install.TypeVariant.makeRule "Types" "ToBackend" "CounterReset"
+    , Install.TypeVariant.makeRule "Types" "FrontendMsg" "Reset"
+    , Install.ClauseInCase.init "Frontend" "update" "Reset" "( { model | counter = 0 }, sendToBackend CounterReset )"
+        |> Install.ClauseInCase.withInsertAfter "Increment"
+        |> Install.ClauseInCase.makeRule
+    , Install.ClauseInCase.init "Backend" "updateFromFrontend" "CounterReset" "( { model | counter = 0 }, broadcast (CounterNewValue 0 clientId) )"
+        |> Install.ClauseInCase.makeRule
+    , Install.Function.init [ "Frontend" ] "view" viewFunction |> Install.Function.makeRule
     ]
+
+
+viewFunction =
+    """view model =
+    Html.div [ style "padding" "50px" ]
+        [ Html.button [ onClick Increment ] [ text "+" ]
+        , Html.div [ style "padding" "10px" ] [ Html.text (String.fromInt model.counter) ]
+        , Html.button [ onClick Decrement ] [ text "-" ]
+        , Html.div [ style "padding-top" "15px", style "padding-bottom" "15px" ] [ Html.text "Click me then refresh me!" ]
+        , Html.button [ onClick Reset ] [ text "Reset" ]
+        ]"""
+
+
+viewFunction2 =
+    """view model =
+     Html.div [ style "padding" "50px" ]
+         [ Html.button [ onClick Increment ] [ text "+" ]
+         , Html.div [ style "padding" "10px" ] [ Html.text (String.fromInt model.counter) ]
+         , Html.button [ onClick Decrement ] [ text "-" ]
+         , Html.div [ style "padding-top" "15px", style "padding-bottom" "15px" ] [ Html.text "Click me then refresh me!" ]
+         , Html.button [ onClick Reset ] [ text "Reset" ]
+         ]"""

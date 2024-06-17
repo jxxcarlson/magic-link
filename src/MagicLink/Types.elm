@@ -5,13 +5,16 @@ module MagicLink.Types exposing
     , Log
     , LogItem(..)
     , LoginCodeStatus(..)
+    , PendingLogins
     , SignInStatus(..)
     , SigninForm(..)
     )
 
+import AssocList
 import Auth.Common
 import Dict exposing (Dict)
 import EmailAddress exposing (EmailAddress)
+import Lamdera
 import Time
 import User
 
@@ -47,6 +50,16 @@ type SignInStatus
 type LoginCodeStatus
     = Checking
     | NotValid
+
+
+type alias PendingLogins =
+    AssocList.Dict
+        Lamdera.SessionId
+        { loginAttempts : Int
+        , emailAddress : EmailAddress
+        , creationTime : Time.Posix
+        , loginCode : Int
+        }
 
 
 type LogItem
