@@ -10,6 +10,7 @@ import Auth.Method.EmailMagicLink
 import Dict exposing (Dict)
 import Dict.Extra as Dict
 import EmailAddress
+import Helper
 import Lamdera exposing (ClientId, SessionId)
 import MagicLink.Backend
 import MagicLink.Common
@@ -22,6 +23,7 @@ import Url
 import User
 
 
+updateFrontend : MagicLink.Types.FrontendMsg -> MagicLink.Types.Model -> ( MagicLink.Types.Model, Cmd FrontendMsg )
 updateFrontend msg model =
     case msg of
         MagicLink.Types.SubmitEmailForSignIn ->
@@ -35,7 +37,7 @@ updateFrontend msg model =
             MagicLink.Frontend.signInWithCode model loginCode
 
         MagicLink.Types.CancelSignIn ->
-            ( { model | route = Route.HomepageRoute }, Cmd.none )
+            ( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute Route.HomepageRoute )
 
         MagicLink.Types.CancelSignUp ->
             ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Cmd.none )
@@ -61,6 +63,9 @@ updateFrontend msg model =
         MagicLink.Types.InputEmail str ->
             ( { model | email = str }, Cmd.none )
 
+        MagicLink.Types.SetRoute route ->
+            ( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute route )
+
 
 updateFromBackend :
     Auth.Common.ToFrontend
@@ -68,16 +73,18 @@ updateFromBackend :
         { a
             | authFlow : Auth.Common.Flow
             , message : String
-            , currentUserData : Maybe User.LoginData
-            , signInState : SignInState
+            , currentUserData : Maybe User.SignInData
+
+            -- , signInState : SignInState
             , route : Route.Route
         }
     ->
         ( { a
             | authFlow : Auth.Common.Flow
             , message : String
-            , currentUserData : Maybe User.LoginData
-            , signInState : SignInState
+            , currentUserData : Maybe User.SignInData
+
+            --, signInState : SignInState
             , route : Route.Route
           }
         , Cmd msg
@@ -112,7 +119,7 @@ updateFromBackend authToFrontendMsg model =
                                 , name = Just userData.name
                                 , username = Just userData.username
                                 }
-                        , signInState = SignedIn
+                        , signInState = MagicLink.Types.SignedIn
                       }
                         |> MagicLink.Frontend.signInWithTokenResponseM userData
                     , MagicLink.Frontend.signInWithTokenResponseC userData
@@ -122,7 +129,7 @@ updateFromBackend authToFrontendMsg model =
                     ( model, Cmd.none )
 
 
-config : Auth.Common.Config FrontendMsg ToBackend BackendMsg ToFrontend LoadedModel BackendModel
+config : Auth.Common.Config FrontendMsg ToBackend BackendMsg ToFrontend MagicLink.Types.Model BackendModel
 config =
     { toBackend = AuthToBackend
     , toFrontend = AuthToFrontend
@@ -229,7 +236,7 @@ findOrRegisterUser params model =
     ( model, Cmd.none )
 
 
-backendConfig : BackendModel -> Auth.Flow.BackendUpdateConfig FrontendMsg BackendMsg ToFrontend LoadedModel BackendModel
+backendConfig : BackendModel -> Auth.Flow.BackendUpdateConfig FrontendMsg BackendMsg ToFrontend MagicLink.Types.Model BackendModel
 backendConfig model =
     { asToFrontend = AuthToFrontend
     , asBackendMsg = AuthBackendMsg
