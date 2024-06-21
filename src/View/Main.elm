@@ -3,6 +3,7 @@ module View.Main exposing (view)
 import Browser
 import Element exposing (Element)
 import Element.Font
+import MagicLink.Types
 import MarkdownThemed
 import Pages.Admin
 import Pages.Home
@@ -50,7 +51,7 @@ view model =
     }
 
 
-loadedView : LoadedModel -> Element FrontendMsg
+loadedView : Types.LoadedModel -> Element FrontendMsg
 loadedView model =
     case model.route of
         HomepageRoute ->
@@ -63,7 +64,7 @@ loadedView model =
             Pages.Parts.generic model Pages.Notes.view
 
         SignInRoute ->
-            Pages.Parts.generic model Pages.SignIn.view
+            Pages.Parts.generic model (Pages.SignIn.view Types.ChildMsg << .magicLinkModel)
 
         AdminRoute ->
             if User.isAdmin model.currentUserData || True then
