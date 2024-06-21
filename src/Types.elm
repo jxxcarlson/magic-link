@@ -49,12 +49,7 @@ type alias LoadedModel =
     , showTooltip : Bool
     , authRedirectBaseUrl : Url
     , currentUserData : Maybe User.SignInData
-
-    -- MAGICLINK
     , magicLinkModel : MagicLink.Types.Model
-
-    -- USER
-    , currentUser : Maybe User.User
 
     -- ADMIN
     , adminDisplay : AdminDisplay
