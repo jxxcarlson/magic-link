@@ -47,10 +47,11 @@ type alias LoadedModel =
     , now : Time.Posix
     , window : { width : Int, height : Int }
     , showTooltip : Bool
+    , authRedirectBaseUrl : Url
+    , currentUserData : Maybe User.SignInData
 
     -- MAGICLINK
     , magicLinkModel : MagicLink.Types.Model
-    , loginErrorMessage : Maybe String
 
     -- USER
     , currentUser : Maybe User.User
@@ -99,7 +100,8 @@ type FrontendMsg
     | PressedShowTooltip
     | MouseDown
       -- MAGICLINK
-    | AuthFrontendMsg MagicLink.Types.FrontendMsg
+    | AuthFrontendMsg MagicLink.Types.MLMsg
+    | ChildMsg MagicLink.Types.MLMsg
       -- ADMIN
     | SetAdminDisplay AdminDisplay
       --

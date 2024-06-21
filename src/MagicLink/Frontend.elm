@@ -68,12 +68,12 @@ enterEmail model email =
             ( model, Cmd.none )
 
 
-handleRegistrationError : { a | signInStatus : MagicLink.Types.SignInStatus } -> String -> ( { a | signInStatus : MagicLink.Types.SignInStatus }, Cmd msg )
+handleRegistrationError : Model -> String -> ( Model, Cmd msg )
 handleRegistrationError model str =
     ( { model | signInStatus = MagicLink.Types.ErrorNotRegistered str }, Cmd.none )
 
 
-handleSignInError : { a | loginErrorMessage : Maybe String, signInStatus : MagicLink.Types.SignInStatus } -> String -> ( { a | loginErrorMessage : Maybe String, signInStatus : MagicLink.Types.SignInStatus }, Cmd msg )
+handleSignInError : Model -> String -> ( Model, Cmd msg )
 handleSignInError model message =
     ( { model | loginErrorMessage = Just message, signInStatus = MagicLink.Types.ErrorNotRegistered message }, Cmd.none )
 

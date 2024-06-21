@@ -9,8 +9,8 @@ import Json.Decode
 import Lamdera
 import MagicLink.Auth
 import MagicLink.Frontend
-import MagicLink.LoginForm
 import MagicLink.Types
+import Pages.SignIn
 import Route
 import Task
 import Time
@@ -21,7 +21,6 @@ import Types
         , FrontendMsg(..)
         , LoadedModel
         , LoadingModel
-        , SignInState(..)
         , ToFrontend(..)
         )
 import Url
@@ -90,31 +89,27 @@ tryLoading loadingModel =
         (\window ->
             case loadingModel.route of
                 _ ->
-                    ( Loaded
-                        { key = loadingModel.key
-                        , now = loadingModel.now
-                        , window = window
-                        , showTooltip = False
-
-                        -- MAGICLINK
-                        , authFlow = Auth.Common.Idle
-                        , authRedirectBaseUrl =
+                    let
+                        authRedirectBaseUrl =
                             let
                                 initUrl =
                                     loadingModel.initUrl
                             in
                             { initUrl | query = Nothing, fragment = Nothing }
-                        , signinForm = MagicLink.LoginForm.init
-                        , loginErrorMessage = Nothing
-                        , signInStatus = MagicLink.Types.NotSignedIn
+                    in
+                    ( Loaded
+                        { key = loadingModel.key
+                        , now = loadingModel.now
+                        , window = window
+                        , showTooltip = False
+                        , magicLinkModel = Pages.SignIn.init authRedirectBaseUrl
+
+                        -- MAGICLINK
+                        , authRedirectBaseUrl = authRedirectBaseUrl
 
                         -- USER
                         , currentUserData = Nothing
                         , currentUser = Nothing
-                        , realname = ""
-                        , username = ""
-                        , email = ""
-                        , signInState = SignedOut
 
                         -- ADMIN
                         , adminDisplay = ADUser
@@ -138,7 +133,8 @@ updateLoaded msg model =
             ( model, Cmd.none )
 
         AuthFrontendMsg authFrontendMsg ->
-            MagicLink.Auth.updateFrontend authFrontendMsg model
+            MagicLink.Auth.updateFrontend authFrontendMsg model.magicLinkModel
+                |> Tuple.mapFirst (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
 
         UrlClicked urlRequest ->
             case urlRequest of
@@ -189,11 +185,13 @@ updateFromBackend msg model =
             updateFromBackendLoaded msg loaded |> Tuple.mapFirst Loaded
 
 
-updateFromBackendLoaded : ToFrontend -> LoadedModel -> ( LoadedModel, Cmd msg )
+updateFromBackendLoaded : ToFrontend -> LoadedModel -> ( LoadedModel, Cmd FrontendMsg )
 updateFromBackendLoaded msg model =
     case msg of
         AuthToFrontend authToFrontendMsg ->
-            MagicLink.Auth.updateFromBackend authToFrontendMsg model
+            MagicLink.Auth.updateFromBackend authToFrontendMsg model.magicLinkModel
+                |> Tuple.mapFirst
+                    (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
 
         GotBackendModel beModel ->
             ( { model | backendModel = Just beModel }, Cmd.none )
@@ -203,7 +201,14 @@ updateFromBackendLoaded msg model =
             -- TODO (placholder)
             case userInfo.username of
                 Just username ->
-                    ( { model | authFlow = Auth.Common.Authorized userInfo.email username }, Cmd.none )
+                    let
+                        magicLinkModel_ =
+                            model.magicLinkModel
+
+                        magicLinkModel =
+                            { magicLinkModel_ | authFlow = Auth.Common.Authorized userInfo.email username }
+                    in
+                    ( { model | magicLinkModel = magicLinkModel }, Cmd.none )
 
                 Nothing ->
                     ( model, Cmd.none )
@@ -228,6 +233,13 @@ updateFromBackendLoaded msg model =
             MagicLink.Frontend.userRegistered model user
 
         UserSignedIn maybeUser ->
+            let
+                magicLinkModel_ =
+                    model.magicLinkModel
+
+                magicLinkModel =
+                    { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn }
+            in
             ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Cmd.none )
 
         GotMessage message ->

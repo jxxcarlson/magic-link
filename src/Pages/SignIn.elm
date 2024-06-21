@@ -1,4 +1,4 @@
-module Pages.SignIn exposing (headerView, view)
+module Pages.SignIn exposing (headerView, init, view)
 
 import Auth.Common
 import Element exposing (Element)
@@ -11,6 +11,7 @@ import MagicLink.Types
 import Pages.Common
 import Route
 import Types exposing (FrontendMsg(..), LoadedModel)
+import Url
 import User
 import View.Button
 import View.Color
@@ -21,8 +22,8 @@ type alias Model =
     MagicLink.Types.Model
 
 
-init : LoadedModel -> Model
-init loadedModel =
+init : Url.Url -> Model
+init url =
     { count = 0
     , signInStatus = MagicLink.Types.NotSignedIn
     , currentUserData = Nothing
@@ -33,7 +34,7 @@ init loadedModel =
     , email = ""
     , message = ""
     , authFlow = Auth.Common.Idle
-    , authRedirectBaseUrl = loadedModel.authRedirectBaseUrl
+    , authRedirectBaseUrl = url
     }
 
 
