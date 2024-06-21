@@ -33,7 +33,6 @@ init loadedModel =
     , email = ""
     , message = ""
     , authFlow = Auth.Common.Idle
-    , currentUserData = Nothing
     , authRedirectBaseUrl = loadedModel.authRedirectBaseUrl
     }
 
@@ -53,8 +52,8 @@ update msg model =
 -- VIEW
 
 
-view : Model -> (Msg -> msg) -> Element FrontendMsg
-view model toSelf =
+view : (MagicLink.Types.MLMsg -> msg) -> Model -> Element FrontendMsg
+view toSelf model =
     case model.signInStatus of
         MagicLink.Types.NotSignedIn ->
             signInView model
