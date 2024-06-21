@@ -169,6 +169,10 @@ updateLoaded msg model =
         SetViewport ->
             ( model, Cmd.none )
 
+        ChildMsg msg_ ->
+            -- TODO: I think this is wrong
+            ( model, Cmd.none )
+
 
 scrollToTop : Cmd FrontendMsg
 scrollToTop =
@@ -187,11 +191,14 @@ updateFromBackend msg model =
 
 updateFromBackendLoaded : ToFrontend -> LoadedModel -> ( LoadedModel, Cmd FrontendMsg )
 updateFromBackendLoaded msg model =
+    let
+        updateMagicLinkModel =
+            \magicLinkModel -> { model | magicLinkModel = magicLinkModel }
+    in
     case msg of
         AuthToFrontend authToFrontendMsg ->
             MagicLink.Auth.updateFromBackend authToFrontendMsg model.magicLinkModel
-                |> Tuple.mapFirst
-                    (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
+                |> Tuple.mapFirst updateMagicLinkModel
 
         GotBackendModel beModel ->
             ( { model | backendModel = Just beModel }, Cmd.none )
@@ -218,10 +225,12 @@ updateFromBackendLoaded msg model =
             ( model, Cmd.none )
 
         SignInError message ->
-            MagicLink.Frontend.handleSignInError model message
+            MagicLink.Frontend.handleSignInError model.magicLinkModel message
+                |> Tuple.mapFirst updateMagicLinkModel
 
         RegistrationError str ->
-            MagicLink.Frontend.handleRegistrationError model str
+            MagicLink.Frontend.handleRegistrationError model.magicLinkModel str
+                |> Tuple.mapFirst updateMagicLinkModel
 
         CheckSignInResponse _ ->
             ( model, Cmd.none )
@@ -230,8 +239,10 @@ updateFromBackendLoaded msg model =
             ( model, Cmd.none )
 
         UserRegistered user ->
-            MagicLink.Frontend.userRegistered model user
+            MagicLink.Frontend.userRegistered model.magicLinkModel user
+                |> Tuple.mapFirst updateMagicLinkModel
 
+        --|> Tuple.mapFirst updateMagicLinkModel
         UserSignedIn maybeUser ->
             let
                 magicLinkModel_ =
@@ -240,7 +251,7 @@ updateFromBackendLoaded msg model =
                 magicLinkModel =
                     { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn }
             in
-            ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Cmd.none )
+            ( updateMagicLinkModel magicLinkModel, Cmd.none )
 
         GotMessage message ->
             ( { model | message = message }, Cmd.none )

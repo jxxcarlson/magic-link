@@ -119,12 +119,12 @@ signOut model =
     )
 
 
-submitSignUp : { a | realname : String, username : String, email : String } -> ( { a | realname : String, username : String, email : String }, Cmd frontendMsg )
+submitSignUp : Model -> ( Model, Cmd frontendMsg )
 submitSignUp model =
     ( model, Lamdera.sendToBackend (AddUser model.realname model.username model.email) )
 
 
-userRegistered : { a | currentUser : Maybe { b | username : String, email : EmailAddress.EmailAddress }, signInStatus : MagicLink.Types.SignInStatus } -> { b | username : String, email : EmailAddress.EmailAddress } -> ( { a | currentUser : Maybe { b | username : String, email : EmailAddress.EmailAddress }, signInStatus : MagicLink.Types.SignInStatus }, Cmd msg )
+userRegistered : Model -> User.User -> ( Model, Cmd msg )
 userRegistered model user =
     ( { model
         | currentUser = Just user

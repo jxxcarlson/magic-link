@@ -26,9 +26,11 @@ import User
 type alias Model =
     { count : Int
     , signInStatus : SignInStatus
+    , currentUser : Maybe User.User
     , currentUserData : Maybe User.SignInData
     , signInForm : SigninFormState
     , signInState : SignInState
+    , loginErrorMessage : Maybe String
     , realname : String
     , username : String
     , email : String
