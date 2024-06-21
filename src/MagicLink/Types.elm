@@ -5,9 +5,11 @@ module MagicLink.Types exposing
     , Log
     , LogItem(..)
     , LoginCodeStatus(..)
+    , Model
     , PendingLogins
+    , SignInState(..)
     , SignInStatus(..)
-    , SigninForm(..)
+    , SigninFormState(..)
     )
 
 import AssocList
@@ -15,8 +17,31 @@ import Auth.Common
 import Dict exposing (Dict)
 import EmailAddress exposing (EmailAddress)
 import Lamdera
+import Route
 import Time
+import Url
 import User
+
+
+type alias Model =
+    { count : Int
+    , signInStatus : SignInStatus
+    , currentUserData : Maybe User.SignInData
+    , signInForm : SigninFormState
+    , signInState : SignInState
+    , realname : String
+    , username : String
+    , email : String
+    , message : String
+    , authFlow : Auth.Common.Flow
+    , authRedirectBaseUrl : Url.Url
+    }
+
+
+type SignInState
+    = SisSignedOut
+    | SisSignUp
+    | SisSignedIn
 
 
 type FrontendMsg
@@ -32,9 +57,10 @@ type FrontendMsg
     | InputRealname String
     | InputUsername String
     | InputEmail String
+    | SetRoute Route.Route
 
 
-type SigninForm
+type SigninFormState
     = EnterEmail EnterEmail_
     | EnterSigninCode EnterLoginCode_
 

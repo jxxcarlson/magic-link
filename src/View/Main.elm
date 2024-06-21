@@ -10,10 +10,10 @@ import Pages.Notes
 import Pages.Parts
 import Pages.SignIn
 import Pages.TermsOfService
-import Predicate
 import Route exposing (Route(..))
 import Theme
 import Types exposing (FrontendModel(..), FrontendMsg, LoadedModel)
+import User
 
 
 noFocus : Element.FocusStyle
@@ -66,7 +66,7 @@ loadedView model =
             Pages.Parts.generic model Pages.SignIn.view
 
         AdminRoute ->
-            if Predicate.isAdmin model.currentUserData || True then
+            if User.isAdmin model.currentUserData || True then
                 Pages.Parts.generic model Pages.Admin.view
 
             else

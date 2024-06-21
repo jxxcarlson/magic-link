@@ -34,6 +34,7 @@ init loadedModel =
     , message = ""
     , authFlow = Auth.Common.Idle
     , currentUserData = Nothing
+    , authRedirectBaseUrl = loadedModel.authRedirectBaseUrl
     }
 
 

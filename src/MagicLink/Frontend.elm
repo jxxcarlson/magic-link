@@ -52,15 +52,15 @@ submitEmailForSignin model =
             ( model, Cmd.none )
 
 
-enterEmail : { a | signinForm : SigninFormState } -> String -> ( { a | signinForm : SigninFormState }, Cmd msg )
+enterEmail : Model -> String -> ( Model, Cmd msg )
 enterEmail model email =
-    case model.signinForm of
+    case model.signInForm of
         EnterEmail signinForm_ ->
             let
                 signinForm =
                     { signinForm_ | email = email }
             in
-            ( { model | signinForm = EnterEmail signinForm }, Cmd.none )
+            ( { model | signInForm = EnterEmail signinForm }, Cmd.none )
 
         EnterSigninCode loginCode_ ->
             -- TODO: complete this
@@ -78,12 +78,12 @@ handleSignInError model message =
     ( { model | loginErrorMessage = Just message, signInStatus = MagicLink.Types.ErrorNotRegistered message }, Cmd.none )
 
 
-signInWithTokenResponseM : a -> { b | currentUserData : Maybe a, route : Route } -> { b | currentUserData : Maybe a, route : Route }
+signInWithTokenResponseM : User.SignInData -> Model -> ( Model, Cmd FrontendMsg )
 signInWithTokenResponseM signInData model =
-    { model | currentUserData = Just signInData, route = HomepageRoute }
+    ( { model | currentUserData = Just signInData }, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute HomepageRoute )
 
 
-signInWithTokenResponseC : User.SignInData -> Cmd msg
+signInWithTokenResponseC : User.SignInData -> Cmd FrontendMsg
 signInWithTokenResponseC signInData =
     if List.member User.AdminRole signInData.roles then
         Lamdera.sendToBackend GetBackendModel
@@ -92,34 +92,27 @@ signInWithTokenResponseC signInData =
         Cmd.none
 
 
-signOut :
-    { a | showTooltip : Bool, signinForm : SigninFormState, loginErrorMessage : Maybe b, currentUserData : Maybe User.SignInData, currentUser : Maybe c, realname : String, username : String, email : String, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String }
-    ->
-        ( { a | showTooltip : Bool, signinForm : SigninFormState, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.SignInData, currentUser : Maybe c, realname : String, username : String, email : String, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String }
-        , Cmd frontendMsg
-        )
+signOut : Model -> ( Model, Cmd frontendMsg )
 signOut model =
     ( { model
-        | showTooltip = False
+        | --showTooltip = False
+          -- TOKEN
+          signInForm = MagicLink.LoginForm.init
 
-        -- TOKEN
-        , signinForm = MagicLink.LoginForm.init
-        , loginErrorMessage = Nothing
+        --, loginErrorMessage = Nothing
         , signInStatus = MagicLink.Types.NotSignedIn
 
         -- USER
         , currentUserData = Nothing
-        , currentUser = Nothing
+
+        --, currentUser = Nothing
         , realname = ""
         , username = ""
         , email = ""
         , signInState = MagicLink.Types.SisSignedOut
 
         -- ADMIN
-        , adminDisplay = ADUser
-
-        --
-        , backendModel = Nothing
+        --, adminDisplay = ADUser
         , message = ""
       }
     , Cmd.none

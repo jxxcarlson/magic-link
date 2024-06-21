@@ -146,7 +146,7 @@ type ToFrontend
     = AuthInitiateSignin Url
     | AuthError Error
     | AuthSessionChallenge AuthChallengeReason
-    | AuthSignInWithTokenResponse (Result Int User.LoginData)
+    | AuthSignInWithTokenResponse (Result Int User.SignInData)
     | ReceivedMessage (Result String String)
 
 

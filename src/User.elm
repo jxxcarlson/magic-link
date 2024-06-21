@@ -1,12 +1,13 @@
 module User exposing
     ( EmailString
     , Id
-    , LoginData
     , Role(..)
+    , SignInData
     , User
     , Username
-    , loginDataOfUser
+    , isAdmin
     , setAsVerified
+    , signinDataOfUser
     )
 
 import Dict
@@ -51,7 +52,7 @@ type alias EmailString =
     String
 
 
-type alias LoginData =
+type alias SignInData =
     { username : String
     , email : EmailString
     , name : String
@@ -59,8 +60,8 @@ type alias LoginData =
     }
 
 
-loginDataOfUser : User -> LoginData
-loginDataOfUser user =
+signinDataOfUser : User -> SignInData
+signinDataOfUser user =
     { username = user.username
     , roles = user.roles
     , name = user.fullname
@@ -75,3 +76,13 @@ type Role
 
 type alias Id =
     String
+
+
+isAdmin : Maybe SignInData -> Bool
+isAdmin maybeLoginData =
+    case maybeLoginData of
+        Just loginData ->
+            List.member AdminRole loginData.roles
+
+        Nothing ->
+            False

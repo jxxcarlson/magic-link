@@ -130,7 +130,7 @@ update msg model =
                     Just username ->
                         case Dict.get username model.users of
                             Just user ->
-                                Process.sleep 60 |> Task.perform (always (AutoLogin sessionId (User.loginDataOfUser user)))
+                                Process.sleep 60 |> Task.perform (always (AutoLogin sessionId (User.signinDataOfUser user)))
 
                             Nothing ->
                                 Lamdera.sendToFrontend clientId (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse (Err 0))

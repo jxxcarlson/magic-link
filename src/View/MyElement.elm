@@ -18,7 +18,7 @@ import Html.Attributes
 import Html.Events
 import Json.Decode as Decode
 import Martin
-import Pages.Parts
+import Pages.Common
 import Route exposing (Route)
 
 
@@ -51,7 +51,7 @@ label idString attrList element =
 routeLinkNewTab : Route -> Route -> Element msg
 routeLinkNewTab currentRoute route =
     Element.link
-        (Pages.Parts.linkStyle currentRoute route)
+        (Pages.Common.linkStyle currentRoute route)
         { url = Route.encode route, label = Element.text (Route.encode route) }
 
 

@@ -142,7 +142,7 @@ handleExistingSession model username sessionId clientId magicToken =
             ( { model | users = User.setAsVerified model.time user model.users }
             , Cmd.batch
                 [ Lamdera.sendToFrontend sessionId
-                    (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse (Ok <| User.loginDataOfUser user))
+                    (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse (Ok <| User.signinDataOfUser user))
                 ]
             )
 
@@ -169,7 +169,7 @@ handleNoSession model time sessionId clientId magicToken =
                                 , pendingLogins = AssocList.remove sessionId model.pendingLogins
                                 , users = User.setAsVerified model.time user model.users
                               }
-                            , User.loginDataOfUser user
+                            , User.signinDataOfUser user
                                 |> Ok
                                 |> (Auth.Common.AuthSignInWithTokenResponse >> AuthToFrontend)
                                 |> Lamdera.sendToFrontend sessionId
@@ -200,9 +200,9 @@ handleNoSession model time sessionId clientId magicToken =
             ( model, Err magicToken |> (Auth.Common.AuthSignInWithTokenResponse >> AuthToFrontend) |> Lamdera.sendToFrontend clientId )
 
 
-getLoginData : User.Id -> User.User -> Types.BackendModel -> Result Types.BackendDataStatus User.LoginData
+getLoginData : User.Id -> User.User -> Types.BackendModel -> Result Types.BackendDataStatus User.SignInData
 getLoginData userId user_ model =
-    User.loginDataOfUser user_ |> Ok
+    User.signinDataOfUser user_ |> Ok
 
 
 getUserFromSessionId : SessionId -> BackendModel -> Maybe ( User.Id, User.User )

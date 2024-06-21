@@ -7,7 +7,6 @@ module Types exposing
     , FrontendMsg(..)
     , LoadedModel
     , LoadingModel
-    , SignInState(..)
     , ToBackend(..)
     , ToFrontend(..)
     )
@@ -50,19 +49,11 @@ type alias LoadedModel =
     , showTooltip : Bool
 
     -- MAGICLINK
-    , authFlow : Auth.Common.Flow
-    , authRedirectBaseUrl : Url
-    , signinForm : MagicLink.Types.SigninForm
+    , magicLinkModel : MagicLink.Types.Model
     , loginErrorMessage : Maybe String
-    , signInStatus : MagicLink.Types.SignInStatus
-    , currentUserData : Maybe User.LoginData
 
     -- USER
     , currentUser : Maybe User.User
-    , signInState : SignInState
-    , realname : String
-    , username : String
-    , email : String
 
     -- ADMIN
     , adminDisplay : AdminDisplay
@@ -72,12 +63,6 @@ type alias LoadedModel =
     , route : Route
     , message : String
     }
-
-
-type SignInState
-    = SignedOut
-    | SignUp
-    | SignedIn
 
 
 type AdminDisplay
@@ -140,7 +125,7 @@ type BackendMsg
       -- MAGICLINK
     | AuthBackendMsg Auth.Common.BackendMsg
       --
-    | AutoLogin SessionId User.LoginData
+    | AutoLogin SessionId User.SignInData
 
 
 type ToFrontend
@@ -151,7 +136,7 @@ type ToFrontend
       ---
     | AuthSuccess Auth.Common.UserInfo
     | UserInfoMsg (Maybe Auth.Common.UserInfo)
-    | CheckSignInResponse (Result BackendDataStatus User.LoginData)
+    | CheckSignInResponse (Result BackendDataStatus User.SignInData)
     | GetLoginTokenRateLimited
     | RegistrationError String
     | SignInError String

@@ -15,7 +15,7 @@ import Element.Font
 import Element.Input
 import EmailAddress exposing (EmailAddress)
 import Html.Attributes
-import MagicLink.Types exposing (EnterEmail_, EnterLoginCode_, LoginCodeStatus(..), SigninForm(..))
+import MagicLink.Types exposing (EnterEmail_, EnterLoginCode_, LoginCodeStatus(..), SigninFormState(..))
 import Martin
 import Route
 import Types exposing (FrontendMsg)
@@ -89,8 +89,8 @@ errorView errorMessage =
         [ Element.text errorMessage ]
 
 
-view : Types.LoadedModel -> SigninForm -> Element FrontendMsg
-view model loginForm =
+view : SigninFormState -> Element FrontendMsg
+view signinFormState =
     Element.column
         [ Element.padding 16
         , Element.centerX
@@ -99,7 +99,7 @@ view model loginForm =
         -- TODO:, Element.widthMax 520
         , Element.spacing 24
         ]
-        [ case loginForm of
+        [ case signinFormState of
             EnterEmail enterEmail2 ->
                 enterEmailView enterEmail2
 
@@ -252,7 +252,7 @@ validateEmail text =
             )
 
 
-init : SigninForm
+init : SigninFormState
 init =
     EnterEmail
         { email = ""

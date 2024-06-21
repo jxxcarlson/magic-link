@@ -69,26 +69,8 @@ updateFrontend msg model =
 
 updateFromBackend :
     Auth.Common.ToFrontend
-    ->
-        { a
-            | authFlow : Auth.Common.Flow
-            , message : String
-            , currentUserData : Maybe User.SignInData
-
-            -- , signInState : SignInState
-            , route : Route.Route
-        }
-    ->
-        ( { a
-            | authFlow : Auth.Common.Flow
-            , message : String
-            , currentUserData : Maybe User.SignInData
-
-            --, signInState : SignInState
-            , route : Route.Route
-          }
-        , Cmd msg
-        )
+    -> MagicLink.Types.Model
+    -> ( MagicLink.Types.Model, Cmd FrontendMsg )
 updateFromBackend authToFrontendMsg model =
     case authToFrontendMsg of
         Auth.Common.ReceivedMessage result ->
@@ -111,7 +93,7 @@ updateFromBackend authToFrontendMsg model =
         Auth.Common.AuthSignInWithTokenResponse result ->
             case result of
                 Ok userData ->
-                    ( { model
+                    { model
                         | currentUserData = Just userData
                         , authFlow =
                             Auth.Common.Done
@@ -119,11 +101,10 @@ updateFromBackend authToFrontendMsg model =
                                 , name = Just userData.name
                                 , username = Just userData.username
                                 }
-                        , signInState = MagicLink.Types.SignedIn
-                      }
+                        , signInStatus = MagicLink.Types.SignedIn
+                    }
                         |> MagicLink.Frontend.signInWithTokenResponseM userData
-                    , MagicLink.Frontend.signInWithTokenResponseC userData
-                    )
+                        |> (\( m, c ) -> ( m, Cmd.batch [ c, MagicLink.Frontend.signInWithTokenResponseC userData ] ))
 
                 Err _ ->
                     ( model, Cmd.none )
