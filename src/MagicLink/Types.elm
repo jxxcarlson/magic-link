@@ -1,10 +1,10 @@
 module MagicLink.Types exposing
     ( EnterEmail_
     , EnterLoginCode_
-    , FrontendMsg(..)
     , Log
     , LogItem(..)
     , LoginCodeStatus(..)
+    , MLMsg(..)
     , Model
     , PendingLogins
     , SignInState(..)
@@ -44,7 +44,7 @@ type SignInState
     | SisSignedIn
 
 
-type FrontendMsg
+type MLMsg
     = SubmitEmailForSignIn
     | AuthSigninRequested { methodId : Auth.Common.MethodId, email : Maybe String }
     | ReceivedSigninCode String
