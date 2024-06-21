@@ -14,7 +14,7 @@ generic : Types.LoadedModel -> (Types.LoadedModel -> Element Types.FrontendMsg) 
 generic model view =
     Element.column
         [ Element.width Element.fill, Element.height Element.fill ]
-        [ Pages.SignIn.headerView model model.route { window = model.window, isCompact = True }
+        [ Pages.SignIn.headerView model.magicLinkModel model.route { window = model.window, isCompact = True }
         , Element.column
             (Element.padding 20
                 :: Element.scrollbarY
