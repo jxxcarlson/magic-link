@@ -5,11 +5,11 @@ import Auth.Common
 import Auth.Flow
 import Backend.Session
 import Dict
-import Helper
 import Lamdera exposing (ClientId, SessionId)
 import LocalUUID
 import MagicLink.Auth
 import MagicLink.Backend
+import MagicLink.Helper as Helper
 import Process
 import Task
 import Time

@@ -14,8 +14,8 @@ module MagicLink.Frontend exposing
 import Auth.Common
 import Dict
 import EmailAddress
-import Helper
 import Lamdera
+import MagicLink.Helper as Helper
 import MagicLink.LoginForm
 import MagicLink.Types exposing (SigninFormState(..))
 import Route exposing (Route(..))

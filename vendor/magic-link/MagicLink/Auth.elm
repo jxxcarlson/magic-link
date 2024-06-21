@@ -10,15 +10,15 @@ import Auth.Method.EmailMagicLink
 import Dict exposing (Dict)
 import Dict.Extra as Dict
 import EmailAddress
-import Helper
 import Lamdera exposing (ClientId, SessionId)
 import MagicLink.Backend
 import MagicLink.Common
 import MagicLink.Frontend
+import MagicLink.Helper as Helper
 import MagicLink.Types
 import Route
 import Time
-import Types exposing (..)
+import Types exposing (BackendModel, BackendMsg(..), FrontendMsg(..), ToBackend(..), ToFrontend(..))
 import Url
 import User
 

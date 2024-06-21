@@ -1,4 +1,4 @@
-module Helper exposing
+module MagicLink.Helper exposing
     ( getAtmosphericRandomNumbers
     , testUserDictionary
     , trigger

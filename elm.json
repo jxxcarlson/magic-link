@@ -3,7 +3,8 @@
     "source-directories": [
         "src",
         "vendor/elm-email",
-        "auth-vendored"
+        "vendor/lamdera-auth",
+        "vendor/magic-link"
     ],
     "elm-version": "0.19.1",
     "dependencies": {
