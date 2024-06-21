@@ -17,39 +17,42 @@ import EmailAddress
 import Helper
 import Lamdera
 import MagicLink.LoginForm
-import MagicLink.Types exposing (SigninForm(..))
+import MagicLink.Types exposing (SigninFormState(..))
 import Route exposing (Route(..))
 import Types
     exposing
         ( AdminDisplay(..)
         , FrontendMsg(..)
         , LoadedModel
-        , SignInState(..)
         , ToBackend(..)
         )
 import User
 
 
-submitEmailForSignin : LoadedModel -> ( LoadedModel, Cmd FrontendMsg )
+type alias Model =
+    MagicLink.Types.Model
+
+
+submitEmailForSignin : Model -> ( Model, Cmd FrontendMsg )
 submitEmailForSignin model =
-    case model.signinForm of
-        EnterEmail signinForm ->
-            case EmailAddress.fromString signinForm.email of
+    case model.signInForm of
+        EnterEmail signInForm_ ->
+            case EmailAddress.fromString signInForm_.email of
                 Just email ->
                     let
                         model2 =
-                            { model | signinForm = EnterSigninCode { sentTo = email, loginCode = "", attempts = Dict.empty } }
+                            { model | signInForm = EnterSigninCode { sentTo = email, loginCode = "", attempts = Dict.empty } }
                     in
-                    ( model2, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.AuthSigninRequested { methodId = "EmailMagicLink", email = Just signinForm.email } )
+                    ( model2, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.AuthSigninRequested { methodId = "EmailMagicLink", email = Just signInForm_.email } )
 
                 Nothing ->
-                    ( { model | signinForm = EnterEmail { signinForm | pressedSubmitEmail = True } }, Cmd.none )
+                    ( { model | signInForm = EnterEmail { signInForm_ | pressedSubmitEmail = True } }, Cmd.none )
 
         EnterSigninCode _ ->
             ( model, Cmd.none )
 
 
-enterEmail : { a | signinForm : SigninForm } -> String -> ( { a | signinForm : SigninForm }, Cmd msg )
+enterEmail : { a | signinForm : SigninFormState } -> String -> ( { a | signinForm : SigninFormState }, Cmd msg )
 enterEmail model email =
     case model.signinForm of
         EnterEmail signinForm_ ->
@@ -80,7 +83,7 @@ signInWithTokenResponseM signInData model =
     { model | currentUserData = Just signInData, route = HomepageRoute }
 
 
-signInWithTokenResponseC : User.LoginData -> Cmd msg
+signInWithTokenResponseC : User.SignInData -> Cmd msg
 signInWithTokenResponseC signInData =
     if List.member User.AdminRole signInData.roles then
         Lamdera.sendToBackend GetBackendModel
@@ -89,7 +92,12 @@ signInWithTokenResponseC signInData =
         Cmd.none
 
 
-signOut : { a | showTooltip : Bool, signinForm : SigninForm, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.LoginData, currentUser : Maybe c, realname : String, username : String, email : String, signInState : SignInState, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String } -> ( { a | showTooltip : Bool, signinForm : SigninForm, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.LoginData, currentUser : Maybe c, realname : String, username : String, email : String, signInState : SignInState, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String }, Cmd frontendMsg )
+signOut :
+    { a | showTooltip : Bool, signinForm : SigninFormState, loginErrorMessage : Maybe b, currentUserData : Maybe User.SignInData, currentUser : Maybe c, realname : String, username : String, email : String, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String }
+    ->
+        ( { a | showTooltip : Bool, signinForm : SigninFormState, loginErrorMessage : Maybe b, signInStatus : MagicLink.Types.SignInStatus, currentUserData : Maybe User.SignInData, currentUser : Maybe c, realname : String, username : String, email : String, adminDisplay : AdminDisplay, backendModel : Maybe d, message : String }
+        , Cmd frontendMsg
+        )
 signOut model =
     ( { model
         | showTooltip = False
@@ -105,7 +113,7 @@ signOut model =
         , realname = ""
         , username = ""
         , email = ""
-        , signInState = SignedOut
+        , signInState = MagicLink.Types.SisSignedOut
 
         -- ADMIN
         , adminDisplay = ADUser
@@ -137,9 +145,9 @@ userRegistered model user =
 -- HELPERS
 
 
-signInWithCode : LoadedModel -> String -> ( LoadedModel, Cmd msg )
+signInWithCode : Model -> String -> ( Model, Cmd msg )
 signInWithCode model signInCode =
-    case model.signinForm of
+    case model.signInForm of
         MagicLink.Types.EnterEmail _ ->
             ( model, Cmd.none )
 
@@ -148,7 +156,7 @@ signInWithCode model signInCode =
                 Ok loginCode ->
                     if Dict.member loginCode enterLoginCode.attempts then
                         ( { model
-                            | signinForm =
+                            | signInForm =
                                 EnterSigninCode
                                     { enterLoginCode | loginCode = String.left MagicLink.LoginForm.loginCodeLength signInCode }
                           }
@@ -157,7 +165,7 @@ signInWithCode model signInCode =
 
                     else
                         ( { model
-                            | signinForm =
+                            | signInForm =
                                 EnterSigninCode
                                     { enterLoginCode
                                         | loginCode = String.left MagicLink.LoginForm.loginCodeLength signInCode
@@ -169,6 +177,6 @@ signInWithCode model signInCode =
                         )
 
                 Err _ ->
-                    ( { model | signinForm = EnterSigninCode { enterLoginCode | loginCode = String.left MagicLink.LoginForm.loginCodeLength signInCode } }
+                    ( { model | signInForm = EnterSigninCode { enterLoginCode | loginCode = String.left MagicLink.LoginForm.loginCodeLength signInCode } }
                     , Cmd.none
                     )
