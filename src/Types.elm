@@ -16,7 +16,6 @@ import Auth.Common
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
 import Dict exposing (Dict)
-import EmailAddress exposing (EmailAddress)
 import Http
 import Lamdera exposing (ClientId, SessionId)
 import LocalUUID
@@ -48,14 +47,9 @@ type alias LoadedModel =
     , window : { width : Int, height : Int }
     , showTooltip : Bool
     , authRedirectBaseUrl : Url
-    , currentUserData : Maybe User.SignInData
     , magicLinkModel : MagicLink.Types.Model
-
-    -- ADMIN
     , adminDisplay : AdminDisplay
     , backendModel : Maybe BackendModel
-
-    --
     , route : Route
     , message : String
     }

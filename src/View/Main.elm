@@ -67,7 +67,7 @@ loadedView model =
             Pages.Parts.generic model (Pages.SignIn.view Types.ChildMsg << .magicLinkModel)
 
         AdminRoute ->
-            if User.isAdmin model.currentUserData || True then
+            if User.isAdmin model.magicLinkModel.currentUserData then
                 Pages.Parts.generic model Pages.Admin.view
 
             else

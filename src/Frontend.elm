@@ -103,18 +103,8 @@ tryLoading loadingModel =
                         , window = window
                         , showTooltip = False
                         , magicLinkModel = Pages.SignIn.init authRedirectBaseUrl
-
-                        -- MAGICLINK
                         , authRedirectBaseUrl = authRedirectBaseUrl
-
-                        -- USER
-                        , currentUserData = Nothing
-                        , currentUser = Nothing
-
-                        -- ADMIN
                         , adminDisplay = ADUser
-
-                        --
                         , route = loadingModel.route
                         , backendModel = Nothing
                         , message = "Starting up ..."
@@ -179,8 +169,7 @@ updateLoaded msg model =
                     model.magicLinkModel
             in
             ( { model
-                | currentUserData = Just userData |> Debug.log "CURRENT USER DATA"
-                , magicLinkModel = { oldMagicLinkModel | currentUserData = Just userData, signInStatus = MagicLink.Types.SignedIn }
+                | magicLinkModel = { oldMagicLinkModel | currentUserData = Just userData, signInStatus = MagicLink.Types.SignedIn }
               }
             , Cmd.none
             )
