@@ -57,6 +57,10 @@ update msg model =
 
 view : (MagicLink.Types.MLMsg -> msg) -> Model -> Element FrontendMsg
 view toSelf model =
+    let
+        _ =
+            Debug.log "SIGN IN STATUS" model.signInStatus
+    in
     case model.signInStatus of
         MagicLink.Types.NotSignedIn ->
             signInView model

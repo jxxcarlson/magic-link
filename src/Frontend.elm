@@ -249,7 +249,12 @@ updateFromBackendLoaded msg model =
                     model.magicLinkModel
 
                 magicLinkModel =
-                    { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn }
+                    case maybeUser of
+                        Nothing ->
+                            { magicLinkModel_ | signInStatus = MagicLink.Types.NotSignedIn }
+
+                        Just _ ->
+                            { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn }
             in
             ( updateMagicLinkModel magicLinkModel, Cmd.none )
 

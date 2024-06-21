@@ -101,7 +101,8 @@ updateFromBackend authToFrontendMsg model =
                                 , name = Just userData.name
                                 , username = Just userData.username
                                 }
-                        , signInStatus = MagicLink.Types.SignedIn
+
+                        -- TODO, disable as test:, signInStatus = MagicLink.Types.SignedIn
                     }
                         |> MagicLink.Frontend.signInWithTokenResponseM userData
                         |> (\( m, c ) -> ( m, Cmd.batch [ c, MagicLink.Frontend.signInWithTokenResponseC userData ] ))
