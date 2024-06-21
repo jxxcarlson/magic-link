@@ -173,6 +173,18 @@ updateLoaded msg model =
             -- TODO: I think this is wrong
             ( model, Cmd.none )
 
+        SignInUser userData ->
+            let
+                oldMagicLinkModel =
+                    model.magicLinkModel
+            in
+            ( { model
+                | currentUserData = Just userData |> Debug.log "CURRENT USER DATA"
+                , magicLinkModel = { oldMagicLinkModel | currentUserData = Just userData, signInStatus = MagicLink.Types.SignedIn }
+              }
+            , Cmd.none
+            )
+
 
 scrollToTop : Cmd FrontendMsg
 scrollToTop =
@@ -251,10 +263,10 @@ updateFromBackendLoaded msg model =
                 magicLinkModel =
                     case maybeUser of
                         Nothing ->
-                            { magicLinkModel_ | signInStatus = MagicLink.Types.NotSignedIn }
+                            { magicLinkModel_ | signInStatus = MagicLink.Types.NotSignedIn } |> Debug.log "USER NOT SIGNED IN (1)"
 
                         Just _ ->
-                            { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn }
+                            { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn } |> Debug.log "USER SIGNED IN (2)"
             in
             ( updateMagicLinkModel magicLinkModel, Cmd.none )
 

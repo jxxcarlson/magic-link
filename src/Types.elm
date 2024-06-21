@@ -102,6 +102,7 @@ type FrontendMsg
       -- MAGICLINK
     | AuthFrontendMsg MagicLink.Types.MLMsg
     | ChildMsg MagicLink.Types.MLMsg
+    | SignInUser User.SignInData
       -- ADMIN
     | SetAdminDisplay AdminDisplay
       --

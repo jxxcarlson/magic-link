@@ -80,7 +80,12 @@ handleSignInError model message =
 
 signInWithTokenResponseM : User.SignInData -> Model -> ( Model, Cmd FrontendMsg )
 signInWithTokenResponseM signInData model =
-    ( { model | currentUserData = Just signInData }, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute HomepageRoute )
+    ( { model | currentUserData = Just signInData }
+    , Cmd.batch
+        [ --Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute HomepageRoute
+          Helper.trigger <| SignInUser signInData
+        ]
+    )
 
 
 signInWithTokenResponseC : User.SignInData -> Cmd FrontendMsg
