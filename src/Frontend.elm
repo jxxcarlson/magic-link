@@ -142,16 +142,9 @@ updateLoaded msg model =
             --    let
             --        magicLinkModel_ =
             --            MagicLink.Auth.updateFrontend MagicLink.Types.CancelSignUp model.magicLinkModel |> Tuple.first
-            --    in
-            --    ( { model | magicLinkModel = magicLinkModel_ }, Cmd.none )
-            --
-            --_ ->
-            --    ( model, Cmd.none )
             MagicLink.Auth.update authFrontendMsg model.magicLinkModel
                 |> Tuple.mapFirst (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
 
-        --MagicLink.Auth.updateFrontend authFrontendMsg model.magicLinkModel
-        --    |> Tuple.mapFirst (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
         UrlClicked urlRequest ->
             case urlRequest of
                 Internal url ->
