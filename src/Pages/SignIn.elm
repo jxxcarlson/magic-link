@@ -197,10 +197,6 @@ cancelSignUpButton =
     button (Types.AuthFrontendMsg MagicLink.Types.CancelSignUp) "Cancel"
 
 
-
--- BUTTON INFRASTRUCTURE
-
-
 button msg label =
     Element.Input.button
         buttonStyle

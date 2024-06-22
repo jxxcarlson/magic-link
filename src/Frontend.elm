@@ -123,9 +123,29 @@ updateLoaded msg model =
             ( model, Cmd.none )
 
         AuthFrontendMsg authFrontendMsg ->
-            MagicLink.Auth.updateFrontend authFrontendMsg model.magicLinkModel
-                |> Tuple.mapFirst (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
+            case authFrontendMsg of
+                MagicLink.Types.CancelSignIn ->
+                    ( { model | route = Route.HomepageRoute }, Cmd.none )
 
+                MagicLink.Types.OpenSignUp ->
+                    let
+                        magicLinkModel_ =
+                            MagicLink.Auth.updateFrontend MagicLink.Types.OpenSignUp model.magicLinkModel |> Tuple.first
+                    in
+                    ( { model | magicLinkModel = magicLinkModel_ }, Cmd.none )
+
+                MagicLink.Types.CancelSignUp ->
+                    let
+                        magicLinkModel_ =
+                            MagicLink.Auth.updateFrontend MagicLink.Types.CancelSignUp model.magicLinkModel |> Tuple.first
+                    in
+                    ( { model | magicLinkModel = magicLinkModel_ }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        --MagicLink.Auth.updateFrontend authFrontendMsg model.magicLinkModel
+        --    |> Tuple.mapFirst (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
         UrlClicked urlRequest ->
             case urlRequest of
                 Internal url ->
@@ -160,8 +180,12 @@ updateLoaded msg model =
             ( model, Cmd.none )
 
         ChildMsg msg_ ->
-            -- TODO: I think this is wrong
-            ( model, Cmd.none )
+            case msg_ of
+                MagicLink.Types.SetRoute route ->
+                    ( { model | route = route }, scrollToTop )
+
+                _ ->
+                    ( model, Cmd.none )
 
         SignInUser userData ->
             let
@@ -193,13 +217,13 @@ updateFromBackend msg model =
 updateFromBackendLoaded : ToFrontend -> LoadedModel -> ( LoadedModel, Cmd FrontendMsg )
 updateFromBackendLoaded msg model =
     let
-        updateMagicLinkModel =
+        updateMagicLinkModelInModel =
             \magicLinkModel -> { model | magicLinkModel = magicLinkModel }
     in
     case msg of
         AuthToFrontend authToFrontendMsg ->
             MagicLink.Auth.updateFromBackend authToFrontendMsg model.magicLinkModel
-                |> Tuple.mapFirst updateMagicLinkModel
+                |> Tuple.mapFirst updateMagicLinkModelInModel
 
         GotBackendModel beModel ->
             ( { model | backendModel = Just beModel }, Cmd.none )
@@ -227,11 +251,11 @@ updateFromBackendLoaded msg model =
 
         SignInError message ->
             MagicLink.Frontend.handleSignInError model.magicLinkModel message
-                |> Tuple.mapFirst updateMagicLinkModel
+                |> Tuple.mapFirst updateMagicLinkModelInModel
 
         RegistrationError str ->
             MagicLink.Frontend.handleRegistrationError model.magicLinkModel str
-                |> Tuple.mapFirst updateMagicLinkModel
+                |> Tuple.mapFirst updateMagicLinkModelInModel
 
         CheckSignInResponse _ ->
             ( model, Cmd.none )
@@ -241,7 +265,7 @@ updateFromBackendLoaded msg model =
 
         UserRegistered user ->
             MagicLink.Frontend.userRegistered model.magicLinkModel user
-                |> Tuple.mapFirst updateMagicLinkModel
+                |> Tuple.mapFirst updateMagicLinkModelInModel
 
         --|> Tuple.mapFirst updateMagicLinkModel
         UserSignedIn maybeUser ->
@@ -257,7 +281,7 @@ updateFromBackendLoaded msg model =
                         Just _ ->
                             { magicLinkModel_ | signInStatus = MagicLink.Types.SignedIn } |> Debug.log "USER SIGNED IN (2)"
             in
-            ( updateMagicLinkModel magicLinkModel, Cmd.none )
+            ( updateMagicLinkModelInModel magicLinkModel, Cmd.none )
 
         GotMessage message ->
             ( { model | message = message }, Cmd.none )

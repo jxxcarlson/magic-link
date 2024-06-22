@@ -37,7 +37,12 @@ updateFrontend msg model =
             MagicLink.Frontend.signInWithCode model loginCode
 
         MagicLink.Types.CancelSignIn ->
-            ( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute Route.HomepageRoute )
+            let
+                _ =
+                    Debug.log "CANCEL SIGN IN (1)" True
+            in
+            --( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute Route.HomepageRoute )
+            ( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.CancelSignIn )
 
         MagicLink.Types.CancelSignUp ->
             ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Cmd.none )

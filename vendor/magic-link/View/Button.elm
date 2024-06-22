@@ -15,6 +15,7 @@ import View.Color
 
 
 -- USER
+--openSignUp : Element.Element Types.FrontendMsg
 
 
 openSignUp =
