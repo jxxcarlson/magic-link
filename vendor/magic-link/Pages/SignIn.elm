@@ -9,7 +9,6 @@ import Element.Input
 import MagicLink.LoginForm
 import MagicLink.Types
 import Route
-import Types exposing (FrontendMsg(..), LoadedModel)
 import Url
 import User
 import View.Button
@@ -48,23 +47,6 @@ update msg model =
 
         _ ->
             model
-
-
-
---= SubmitEmailForSignIn
---| AuthSigninRequested { methodId : Auth.Common.MethodId, email : Maybe String }
---| ReceivedSigninCode String
---| CancelSignIn
---| CancelSignUp
---| OpenSignUp
---| TypedEmailInSignInForm String
---| SubmitSignUp
---| SignOut
---| InputRealname String
---| InputUsername String
---| InputEmail String
---| SetRoute Route.Route
--- VIEW
 
 
 view : (MagicLink.Types.MLMsg -> msg) -> Model -> Element MagicLink.Types.MLMsg
