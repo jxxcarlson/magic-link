@@ -89,7 +89,7 @@ errorView errorMessage =
         [ Element.text errorMessage ]
 
 
-view : SigninFormState -> Element MagicLink.Types.MLMsg
+view : SigninFormState -> Element MagicLink.Types.Msg
 view signinFormState =
     Element.column
         [ Element.padding 16
@@ -113,7 +113,7 @@ view signinFormState =
         ]
 
 
-enterLoginCodeView : EnterLoginCode_ -> Element MagicLink.Types.MLMsg
+enterLoginCodeView : EnterLoginCode_ -> Element MagicLink.Types.Msg
 enterLoginCodeView model =
     let
         -- label : MyElement.Label
@@ -203,7 +203,7 @@ maxLoginAttempts =
     10
 
 
-enterEmailView : EnterEmail_ -> Element MagicLink.Types.MLMsg
+enterEmailView : EnterEmail_ -> Element MagicLink.Types.Msg
 enterEmailView model =
     Element.column
         [ Element.spacing 16 ]

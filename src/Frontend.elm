@@ -159,7 +159,7 @@ updateLoaded msg model =
         SetViewport ->
             ( model, Cmd.none )
 
-        ChildMsg msg_ ->
+        LiftMsg msg_ ->
             ( model, Cmd.none )
 
         SetRoute_ route ->

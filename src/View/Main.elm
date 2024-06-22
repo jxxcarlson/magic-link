@@ -67,7 +67,7 @@ loadedView model =
         SignInRoute ->
             generic
                 model
-                (\model_ -> Pages.SignIn.view Types.ChildMsg model_.magicLinkModel |> Element.map Types.AuthFrontendMsg)
+                (\model_ -> Pages.SignIn.view Types.LiftMsg model_.magicLinkModel |> Element.map Types.AuthFrontendMsg)
 
         AdminRoute ->
             if User.isAdmin model.magicLinkModel.currentUserData then

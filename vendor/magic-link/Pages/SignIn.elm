@@ -39,7 +39,7 @@ init url =
     }
 
 
-update : MagicLink.Types.MLMsg -> Model -> Model
+update : MagicLink.Types.Msg -> Model -> Model
 update msg model =
     case msg of
         MagicLink.Types.InputRealname str ->
@@ -49,7 +49,7 @@ update msg model =
             model
 
 
-view : (MagicLink.Types.MLMsg -> msg) -> Model -> Element MagicLink.Types.MLMsg
+view : (MagicLink.Types.Msg -> msg) -> Model -> Element MagicLink.Types.Msg
 view toSelf model =
     let
         _ =
@@ -78,7 +78,7 @@ view toSelf model =
                 ]
 
 
-signedInView : Model -> Element MagicLink.Types.MLMsg
+signedInView : Model -> Element MagicLink.Types.Msg
 signedInView model =
     case model.currentUserData of
         Nothing ->
@@ -88,7 +88,7 @@ signedInView model =
             signOutButton userData.username
 
 
-signInView : Model -> Element MagicLink.Types.MLMsg
+signInView : Model -> Element MagicLink.Types.Msg
 signInView model =
     Element.column []
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign in")
@@ -103,7 +103,7 @@ signInView model =
         ]
 
 
-signInAfterRegisteringView : Model -> Element MagicLink.Types.MLMsg
+signInAfterRegisteringView : Model -> Element MagicLink.Types.Msg
 signInAfterRegisteringView model =
     Element.column []
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign in")
@@ -111,7 +111,7 @@ signInAfterRegisteringView model =
         ]
 
 
-signUp : Model -> Element MagicLink.Types.MLMsg
+signUp : Model -> Element MagicLink.Types.Msg
 signUp model =
     Element.column [ Element.spacing 18, topPadding ]
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign up")
@@ -126,7 +126,7 @@ signUp model =
         ]
 
 
-headerView : Model -> Route.Route -> { window : { width : Int, height : Int }, isCompact : Bool } -> Element MagicLink.Types.MLMsg
+headerView : Model -> Route.Route -> { window : { width : Int, height : Int }, isCompact : Bool } -> Element MagicLink.Types.Msg
 headerView model route config =
     Element.el
         [ Element.Background.color View.Color.blue
@@ -177,12 +177,12 @@ headerView model route config =
 -- BUTTON
 
 
-signUpButton : Element.Element MagicLink.Types.MLMsg
+signUpButton : Element.Element MagicLink.Types.Msg
 signUpButton =
     button MagicLink.Types.SubmitSignUp "Submit"
 
 
-signOutButton : String -> Element.Element MagicLink.Types.MLMsg
+signOutButton : String -> Element.Element MagicLink.Types.Msg
 signOutButton str =
     button MagicLink.Types.SignOut ("Sign out " ++ str)
 

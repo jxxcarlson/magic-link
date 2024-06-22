@@ -89,8 +89,8 @@ type FrontendMsg
     | PressedShowTooltip
     | MouseDown
       -- MAGICLINK
-    | AuthFrontendMsg MagicLink.Types.MLMsg
-    | ChildMsg MagicLink.Types.MLMsg
+    | AuthFrontendMsg MagicLink.Types.Msg
+    | LiftMsg MagicLink.Types.Msg
     | SignInUser User.SignInData
       -- ADMIN
     | SetAdminDisplay AdminDisplay

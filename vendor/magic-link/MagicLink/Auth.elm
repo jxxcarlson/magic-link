@@ -23,7 +23,7 @@ import Url
 import User
 
 
-update : MagicLink.Types.MLMsg -> MagicLink.Types.Model -> ( MagicLink.Types.Model, Cmd FrontendMsg )
+update : MagicLink.Types.Msg -> MagicLink.Types.Model -> ( MagicLink.Types.Model, Cmd FrontendMsg )
 update msg model =
     case msg of
         MagicLink.Types.SubmitEmailForSignIn ->

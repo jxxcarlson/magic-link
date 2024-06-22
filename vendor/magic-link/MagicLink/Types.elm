@@ -4,8 +4,8 @@ module MagicLink.Types exposing
     , Log
     , LogItem(..)
     , LoginCodeStatus(..)
-    , MLMsg(..)
     , Model
+    , Msg(..)
     , PendingLogins
     , SignInState(..)
     , SignInStatus(..)
@@ -46,7 +46,7 @@ type SignInState
     | SisSignedIn
 
 
-type MLMsg
+type Msg
     = SubmitEmailForSignIn
     | AuthSigninRequested { methodId : Auth.Common.MethodId, email : Maybe String }
     | ReceivedSigninCode String

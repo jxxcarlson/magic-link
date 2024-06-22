@@ -84,6 +84,6 @@ secondaryButtonsStyle =
     ]
 
 
-emailAddressLink : String -> Element MagicLink.Types.MLMsg
+emailAddressLink : String -> Element MagicLink.Types.Msg
 emailAddressLink email =
     Html.a [ Html.Attributes.href ("mailto:" ++ email) ] [ Html.text email ] |> Element.html
