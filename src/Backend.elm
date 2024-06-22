@@ -10,7 +10,7 @@ import MagicLink.Auth
 import MagicLink.Backend
 import MagicLink.Helper as Helper
 import Process
-import Reconnet as Reconnect
+import Reconnect as Reconnect
 import Task
 import Time
 import Types exposing (BackendModel, BackendMsg(..), ToBackend(..), ToFrontend(..))

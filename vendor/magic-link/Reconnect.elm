@@ -1,4 +1,4 @@
-module Reconnet exposing (reconnect)
+module Reconnect exposing (reconnect)
 
 import Auth.Common
 import Dict exposing (Dict)
