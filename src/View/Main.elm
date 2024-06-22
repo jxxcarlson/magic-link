@@ -14,6 +14,7 @@ import Route exposing (Route(..))
 import Types exposing (FrontendModel(..), FrontendMsg, LoadedModel)
 import User
 import View.Color
+import View.Common
 import View.MarkdownThemed as MarkdownThemed
 import View.Theme as Theme
 
@@ -77,6 +78,28 @@ loadedView model =
                 generic model Pages.Home.view
 
 
+headerView : LoadedModel -> Route.Route -> { window : { width : Int, height : Int }, isCompact : Bool } -> Element FrontendMsg
+headerView model route config =
+    Element.el
+        [ Element.Background.color View.Color.blue
+        , Element.paddingXY 24 16
+
+        --, Element.width (Element.px config.window.width)
+        --, Element.alignTop
+        ]
+        (Element.wrappedRow
+            [ Element.alignLeft
+            , Element.spacing 24
+            , Element.Background.color View.Color.blue
+            , Element.Font.color (Element.rgb 1 1 1)
+            ]
+            [ Element.link
+                (View.Common.linkStyle route Route.Notes)
+                { url = Route.encode Route.Notes, label = Element.text "Notes" }
+            ]
+        )
+
+
 
 ---
 
@@ -85,7 +108,14 @@ generic : Types.LoadedModel -> (Types.LoadedModel -> Element Types.FrontendMsg) 
 generic model view_ =
     Element.column
         [ Element.width Element.fill, Element.height Element.fill ]
-        [ Pages.SignIn.headerView model.magicLinkModel model.route { window = model.window, isCompact = True } |> Element.map Types.AuthFrontendMsg
+        [ Element.row [ Element.width (Element.px model.window.width), Element.Background.color View.Color.blue ]
+            [ ---
+              Pages.SignIn.headerView model.magicLinkModel
+                model.route
+                { window = model.window, isCompact = True }
+                |> Element.map Types.AuthFrontendMsg
+            , headerView model model.route { window = model.window, isCompact = True }
+            ]
         , Element.column
             (Element.padding 20
                 :: Element.scrollbarY
