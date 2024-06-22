@@ -5,17 +5,17 @@ import Element exposing (Element)
 import Element.Background
 import Element.Font
 import MagicLink.Types
-import MarkdownThemed
 import Pages.Admin
 import Pages.Home
 import Pages.Notes
 import Pages.SignIn
 import Pages.TermsOfService
 import Route exposing (Route(..))
-import Theme
 import Types exposing (FrontendModel(..), FrontendMsg, LoadedModel)
 import User
 import View.Color
+import View.MarkdownThemed as MarkdownThemed
+import View.Theme as Theme
 
 
 noFocus : Element.FocusStyle

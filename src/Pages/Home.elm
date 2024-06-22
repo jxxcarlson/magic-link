@@ -1,9 +1,9 @@
 module Pages.Home exposing (view)
 
 import Element exposing (Element)
-import MarkdownThemed
-import Theme
 import Types exposing (FrontendMsg(..), LoadedModel)
+import View.MarkdownThemed as MarkdownThemed
+import View.Theme as Theme
 
 
 view : LoadedModel -> Element FrontendMsg

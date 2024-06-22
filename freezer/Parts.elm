@@ -5,7 +5,7 @@ import Element.Background
 import Element.Font
 import Pages.SignIn
 import Route exposing (Route(..))
-import Theme
+import View.Theme as Theme
 import Types
 import View.Color
 

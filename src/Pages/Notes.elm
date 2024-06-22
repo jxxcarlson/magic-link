@@ -1,8 +1,8 @@
 module Pages.Notes exposing (view)
 
 import Element exposing (Element)
-import MarkdownThemed
 import Types exposing (LoadedModel)
+import View.MarkdownThemed as MarkdownThemed
 
 
 view : LoadedModel -> Element msg

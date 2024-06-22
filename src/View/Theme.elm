@@ -1,4 +1,4 @@
-module Theme exposing
+module View.Theme exposing
     ( contentAttributes
     , css
     )
