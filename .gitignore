@@ -9,4 +9,4 @@ token-code/
 
 
 # TEMPORARY
-src/Config.elm
+vendor/magic-link/Config.elm
