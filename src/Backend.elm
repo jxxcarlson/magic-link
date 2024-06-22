@@ -3,7 +3,6 @@ module Backend exposing (app)
 import AssocList
 import Auth.Common
 import Auth.Flow
-import Backend.Session
 import Dict
 import Lamdera exposing (ClientId, SessionId)
 import LocalUUID
@@ -11,6 +10,7 @@ import MagicLink.Auth
 import MagicLink.Backend
 import MagicLink.Helper as Helper
 import Process
+import Reconnet as Reconnect
 import Task
 import Time
 import Types exposing (BackendModel, BackendMsg(..), ToBackend(..), ToFrontend(..))
@@ -125,7 +125,7 @@ update msg model =
             ( model
             , Cmd.batch
                 [ Helper.getAtmosphericRandomNumbers
-                , Backend.Session.reconnect model sessionId clientId
+                , Reconnect.reconnect model sessionId clientId
                 , case AssocList.get sessionId model.sessionDict of
                     Just username ->
                         case Dict.get username model.users of
