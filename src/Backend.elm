@@ -6,16 +6,13 @@ import Auth.Common
 import Auth.Flow
 import Dict
 import Lamdera exposing (ClientId, SessionId)
-import LocalUUID
 import MagicLink.Auth
 import MagicLink.Backend
 import MagicLink.Helper as Helper
-import Process
 import Reconnect
 import Task
 import Time
 import Types exposing (BackendModel, BackendMsg(..), ToBackend(..), ToFrontend(..))
-import User
 
 
 app =
