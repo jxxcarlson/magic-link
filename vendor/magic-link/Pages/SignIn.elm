@@ -131,19 +131,17 @@ headerView model route config =
     Element.el
         [ Element.Background.color View.Color.blue
         , Element.paddingXY 24 16
-        , Element.width (Element.px config.window.width)
+        , Element.width (Element.px 420) --(Element.px config.window.width)
         , Element.alignTop
         ]
         (Element.wrappedRow
-            ([ Element.spacing 24
-             , Element.Background.color View.Color.blue
-             , Element.Font.color (Element.rgb 1 1 1)
-             ]
-             --++ Theme.contentAttributes
-            )
+            [ Element.spacing 24
+            , Element.Background.color View.Color.blue
+            , Element.Font.color (Element.rgb 1 1 1)
+            ]
             [ Element.link
                 (View.Common.linkStyle route Route.HomepageRoute)
-                { url = Route.encode Route.HomepageRoute, label = Element.text "Magic Link Authentication" }
+                { url = Route.encode Route.HomepageRoute, label = Element.text "Home" }
             , if User.isAdmin model.currentUserData then
                 Element.link
                     (View.Common.linkStyle route Route.AdminRoute)
