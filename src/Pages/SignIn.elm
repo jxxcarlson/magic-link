@@ -8,13 +8,13 @@ import Element.Font
 import Element.Input
 import MagicLink.LoginForm
 import MagicLink.Types
-import Pages.Common
 import Route
 import Types exposing (FrontendMsg(..), LoadedModel)
 import Url
 import User
 import View.Button
 import View.Color
+import View.Common
 import View.Input
 
 
@@ -148,11 +148,11 @@ headerView model route config =
              --++ Theme.contentAttributes
             )
             [ Element.link
-                (Pages.Common.linkStyle route Route.HomepageRoute)
+                (View.Common.linkStyle route Route.HomepageRoute)
                 { url = Route.encode Route.HomepageRoute, label = Element.text "Magic Link Authentication" }
             , if User.isAdmin model.currentUserData then
                 Element.link
-                    (Pages.Common.linkStyle route Route.AdminRoute)
+                    (View.Common.linkStyle route Route.AdminRoute)
                     { url = Route.encode Route.AdminRoute, label = Element.text "Admin" }
 
               else
@@ -163,7 +163,7 @@ headerView model route config =
 
                 Nothing ->
                     Element.link
-                        (Pages.Common.linkStyle route Route.SignInRoute)
+                        (View.Common.linkStyle route Route.SignInRoute)
                         { url = Route.encode Route.SignInRoute
                         , label =
                             Element.el []

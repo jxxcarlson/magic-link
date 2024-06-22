@@ -1,4 +1,4 @@
-module Pages.Common exposing (linkStyle)
+module View.Common exposing (linkStyle)
 
 import Element
 import Element.Font
