@@ -1,6 +1,7 @@
 module Backend exposing (app)
 
 import AssocList
+import Atmospheric
 import Auth.Common
 import Auth.Flow
 import Dict
@@ -10,7 +11,7 @@ import MagicLink.Auth
 import MagicLink.Backend
 import MagicLink.Helper as Helper
 import Process
-import Reconnect as Reconnect
+import Reconnect
 import Task
 import Time
 import Types exposing (BackendModel, BackendMsg(..), ToBackend(..), ToFrontend(..))
@@ -71,43 +72,7 @@ update msg model =
             ( model, Cmd.none )
 
         GotAtmosphericRandomNumbers tryRandomAtmosphericNumbers ->
-            let
-                ( numbers, data_ ) =
-                    case tryRandomAtmosphericNumbers of
-                        Err _ ->
-                            ( model.randomAtmosphericNumbers, model.localUuidData )
-
-                        Ok rns ->
-                            let
-                                parts =
-                                    rns
-                                        |> String.split "\t"
-                                        |> List.map String.trim
-                                        |> List.filterMap String.toInt
-
-                                data =
-                                    LocalUUID.initFrom4List parts
-                            in
-                            ( Just parts, data )
-            in
-            ( { model
-                | randomAtmosphericNumbers = numbers
-                , localUuidData = data_
-                , users =
-                    if Dict.isEmpty model.users then
-                        Helper.testUserDictionary
-
-                    else
-                        model.users
-                , userNameToEmailString =
-                    if Dict.isEmpty model.userNameToEmailString then
-                        Dict.fromList [ ( "jxxcarlson", "jxxcarlson@gmail.com" ), ( "aristotle", "jxxcarlson@mac.com" ) ]
-
-                    else
-                        model.userNameToEmailString
-              }
-            , Cmd.none
-            )
+            Atmospheric.gotNumbers model tryRandomAtmosphericNumbers
 
         GotFastTick time ->
             ( { model | time = time }
@@ -122,23 +87,7 @@ update msg model =
             ( model, Lamdera.sendToFrontend sessionId (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse <| Ok <| loginData) )
 
         OnConnected sessionId clientId ->
-            ( model
-            , Cmd.batch
-                [ Helper.getAtmosphericRandomNumbers
-                , Reconnect.reconnect model sessionId clientId
-                , case AssocList.get sessionId model.sessionDict of
-                    Just username ->
-                        case Dict.get username model.users of
-                            Just user ->
-                                Process.sleep 60 |> Task.perform (always (AutoLogin sessionId (User.signinDataOfUser user)))
-
-                            Nothing ->
-                                Lamdera.sendToFrontend clientId (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse (Err 0))
-
-                    Nothing ->
-                        Lamdera.sendToFrontend clientId (AuthToFrontend <| Auth.Common.AuthSignInWithTokenResponse (Err 1))
-                ]
-            )
+            Reconnect.connect model sessionId clientId
 
 
 
