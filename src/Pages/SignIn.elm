@@ -40,22 +40,34 @@ init url =
     }
 
 
-type Msg
-    = Increment
-
-
-update : Msg -> Model -> Model
+update : MagicLink.Types.MLMsg -> Model -> Model
 update msg model =
     case msg of
-        Increment ->
-            { model | count = model.count + 1 }
+        MagicLink.Types.InputRealname str ->
+            { model | realname = str }
+
+        _ ->
+            model
 
 
 
+--= SubmitEmailForSignIn
+--| AuthSigninRequested { methodId : Auth.Common.MethodId, email : Maybe String }
+--| ReceivedSigninCode String
+--| CancelSignIn
+--| CancelSignUp
+--| OpenSignUp
+--| TypedEmailInSignInForm String
+--| SubmitSignUp
+--| SignOut
+--| InputRealname String
+--| InputUsername String
+--| InputEmail String
+--| SetRoute Route.Route
 -- VIEW
 
 
-view : (MagicLink.Types.MLMsg -> msg) -> Model -> Element FrontendMsg
+view : (MagicLink.Types.MLMsg -> msg) -> Model -> Element MagicLink.Types.MLMsg
 view toSelf model =
     let
         _ =
@@ -84,7 +96,7 @@ view toSelf model =
                 ]
 
 
-signedInView : Model -> Element FrontendMsg
+signedInView : Model -> Element MagicLink.Types.MLMsg
 signedInView model =
     case model.currentUserData of
         Nothing ->
@@ -94,7 +106,7 @@ signedInView model =
             signOutButton userData.username
 
 
-signInView : Model -> Element FrontendMsg
+signInView : Model -> Element MagicLink.Types.MLMsg
 signInView model =
     Element.column []
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign in")
@@ -109,7 +121,7 @@ signInView model =
         ]
 
 
-signInAfterRegisteringView : Model -> Element FrontendMsg
+signInAfterRegisteringView : Model -> Element MagicLink.Types.MLMsg
 signInAfterRegisteringView model =
     Element.column []
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign in")
@@ -117,13 +129,13 @@ signInAfterRegisteringView model =
         ]
 
 
-signUp : Model -> Element FrontendMsg
+signUp : Model -> Element MagicLink.Types.MLMsg
 signUp model =
     Element.column [ Element.spacing 18, topPadding ]
         [ Element.el [ Element.Font.semiBold, Element.Font.size 24 ] (Element.text "Sign up")
-        , View.Input.template "Real Name" model.realname (AuthFrontendMsg << MagicLink.Types.InputRealname)
-        , View.Input.template "User Name" model.username (AuthFrontendMsg << MagicLink.Types.InputUsername)
-        , View.Input.template "Email" model.email (AuthFrontendMsg << MagicLink.Types.InputEmail)
+        , View.Input.template "Real Name" model.realname MagicLink.Types.InputRealname
+        , View.Input.template "User Name" model.username MagicLink.Types.InputUsername
+        , View.Input.template "Email" model.email MagicLink.Types.InputEmail
         , Element.row [ Element.spacing 18 ]
             [ signUpButton
             , cancelSignUpButton
@@ -132,7 +144,7 @@ signUp model =
         ]
 
 
-headerView : Model -> Route.Route -> { window : { width : Int, height : Int }, isCompact : Bool } -> Element Types.FrontendMsg
+headerView : Model -> Route.Route -> { window : { width : Int, height : Int }, isCompact : Bool } -> Element MagicLink.Types.MLMsg
 headerView model route config =
     Element.el
         [ Element.Background.color View.Color.blue
@@ -183,18 +195,18 @@ headerView model route config =
 -- BUTTON
 
 
-signUpButton : Element.Element Types.FrontendMsg
+signUpButton : Element.Element MagicLink.Types.MLMsg
 signUpButton =
-    button (Types.AuthFrontendMsg MagicLink.Types.SubmitSignUp) "Submit"
+    button MagicLink.Types.SubmitSignUp "Submit"
 
 
-signOutButton : String -> Element.Element Types.FrontendMsg
+signOutButton : String -> Element.Element MagicLink.Types.MLMsg
 signOutButton str =
-    button (Types.AuthFrontendMsg MagicLink.Types.SignOut) ("Sign out " ++ str)
+    button MagicLink.Types.SignOut ("Sign out " ++ str)
 
 
 cancelSignUpButton =
-    button (Types.AuthFrontendMsg MagicLink.Types.CancelSignUp) "Cancel"
+    button MagicLink.Types.CancelSignUp "Cancel"
 
 
 button msg label =

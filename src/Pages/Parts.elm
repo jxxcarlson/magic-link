@@ -14,14 +14,14 @@ generic : Types.LoadedModel -> (Types.LoadedModel -> Element Types.FrontendMsg) 
 generic model view =
     Element.column
         [ Element.width Element.fill, Element.height Element.fill ]
-        [ Pages.SignIn.headerView model.magicLinkModel model.route { window = model.window, isCompact = True }
+        [ Pages.SignIn.headerView model.magicLinkModel model.route { window = model.window, isCompact = True } |> Element.map Types.AuthFrontendMsg
         , Element.column
             (Element.padding 20
                 :: Element.scrollbarY
                 :: Element.height (Element.px <| model.window.height - 95)
                 :: Theme.contentAttributes
             )
-            [ view model
+            [ view model -- |> Element.map Types.AuthFrontendMsg
             ]
         , footer model.route model
         ]

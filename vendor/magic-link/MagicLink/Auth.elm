@@ -1,7 +1,7 @@
 module MagicLink.Auth exposing
     ( backendConfig
+    , update
     , updateFromBackend
-    , updateFrontend
     )
 
 import Auth.Common exposing (UserInfo)
@@ -23,8 +23,8 @@ import Url
 import User
 
 
-updateFrontend : MagicLink.Types.MLMsg -> MagicLink.Types.Model -> ( MagicLink.Types.Model, Cmd FrontendMsg )
-updateFrontend msg model =
+update : MagicLink.Types.MLMsg -> MagicLink.Types.Model -> ( MagicLink.Types.Model, Cmd FrontendMsg )
+update msg model =
     case msg of
         MagicLink.Types.SubmitEmailForSignIn ->
             MagicLink.Frontend.submitEmailForSignin model
@@ -42,7 +42,8 @@ updateFrontend msg model =
                     Debug.log "CANCEL SIGN IN (1)" True
             in
             --( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute Route.HomepageRoute )
-            ( model, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.CancelSignIn )
+            -- ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Helper.trigger <| AuthFrontendMsg <| MagicLink.Types.SetRoute Route.HomepageRoute )
+            ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Helper.trigger (Types.SetRoute_ Route.HomepageRoute) )
 
         MagicLink.Types.CancelSignUp ->
             ( { model | signInStatus = MagicLink.Types.NotSignedIn }, Cmd.none )

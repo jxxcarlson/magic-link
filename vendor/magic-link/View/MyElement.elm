@@ -17,6 +17,7 @@ import Html
 import Html.Attributes
 import Html.Events
 import Json.Decode as Decode
+import MagicLink.Types
 import Martin
 import Route exposing (Route)
 import View.Common
@@ -83,6 +84,6 @@ secondaryButtonsStyle =
     ]
 
 
-emailAddressLink : String -> Element msg
+emailAddressLink : String -> Element MagicLink.Types.MLMsg
 emailAddressLink email =
     Html.a [ Html.Attributes.href ("mailto:" ++ email) ] [ Html.text email ] |> Element.html

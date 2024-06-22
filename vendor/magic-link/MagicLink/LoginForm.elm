@@ -89,7 +89,7 @@ errorView errorMessage =
         [ Element.text errorMessage ]
 
 
-view : SigninFormState -> Element FrontendMsg
+view : SigninFormState -> Element MagicLink.Types.MLMsg
 view signinFormState =
     Element.column
         [ Element.padding 16
@@ -113,7 +113,7 @@ view signinFormState =
         ]
 
 
-enterLoginCodeView : EnterLoginCode_ -> Element FrontendMsg
+enterLoginCodeView : EnterLoginCode_ -> Element MagicLink.Types.MLMsg
 enterLoginCodeView model =
     let
         -- label : MyElement.Label
@@ -152,7 +152,7 @@ enterLoginCodeView model =
                 , Element.Border.width 1
                 , Element.Background.color (Element.rgba 0 0 0.2 0)
                 ]
-                { onChange = Types.AuthFrontendMsg << MagicLink.Types.ReceivedSigninCode
+                { onChange = MagicLink.Types.ReceivedSigninCode
                 , text = model.loginCode
                 , placeholder = Nothing --Just (Element.Input.placeholder [] (Element.text "12345678"))
                 , label = label.id
@@ -203,13 +203,13 @@ maxLoginAttempts =
     10
 
 
-enterEmailView : EnterEmail_ -> Element FrontendMsg
+enterEmailView : EnterEmail_ -> Element MagicLink.Types.MLMsg
 enterEmailView model =
     Element.column
         [ Element.spacing 16 ]
         [ emailInput
-            (Types.AuthFrontendMsg MagicLink.Types.SubmitEmailForSignIn)
-            (Types.AuthFrontendMsg << MagicLink.Types.TypedEmailInSignInForm)
+            MagicLink.Types.SubmitEmailForSignIn
+            MagicLink.Types.TypedEmailInSignInForm
             model.email
             "Enter your email address"
             (case ( model.pressedSubmitEmail, validateEmail model.email ) of
@@ -229,8 +229,8 @@ enterEmailView model =
             ]
         , Element.row
             [ Element.spacing 16 ]
-            [ MyElement.secondaryButton [ Martin.elementId cancelButtonId ] (Types.AuthFrontendMsg MagicLink.Types.CancelSignIn) "Cancel"
-            , MyElement.primaryButton submitEmailButtonId (Types.AuthFrontendMsg MagicLink.Types.SubmitEmailForSignIn) "Sign in"
+            [ MyElement.secondaryButton [ Martin.elementId cancelButtonId ] MagicLink.Types.CancelSignIn "Cancel"
+            , MyElement.primaryButton submitEmailButtonId MagicLink.Types.SubmitEmailForSignIn "Sign in"
             ]
         , if model.rateLimited then
             errorView "Too many sign in attempts have been made. Please try again later."

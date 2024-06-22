@@ -95,6 +95,7 @@ type FrontendMsg
       -- ADMIN
     | SetAdminDisplay AdminDisplay
       --
+    | SetRoute_ Route
     | SetViewport
 
 

@@ -19,7 +19,7 @@ import View.Color
 
 
 openSignUp =
-    button (Types.AuthFrontendMsg MagicLink.Types.OpenSignUp) "Sign up"
+    button MagicLink.Types.OpenSignUp "Sign up"
 
 
 setAdminDisplay : Types.AdminDisplay -> Types.AdminDisplay -> String -> Element.Element Types.FrontendMsg
