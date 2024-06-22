@@ -120,28 +120,9 @@ updateLoaded : FrontendMsg -> LoadedModel -> ( LoadedModel, Cmd FrontendMsg )
 updateLoaded msg model =
     case msg of
         NoOp ->
-            let
-                _ =
-                    Debug.log "NO Op" True
-            in
             ( model, Cmd.none )
 
         AuthFrontendMsg authFrontendMsg ->
-            --case authFrontendMsg of
-            --MagicLink.Types.CancelSignIn ->
-            --    ( { model | route = Route.HomepageRoute }, Cmd.none )
-            --
-            --MagicLink.Types.OpenSignUp ->
-            --    let
-            --        magicLinkModel_ =
-            --            MagicLink.Auth.updateFrontend MagicLink.Types.OpenSignUp model.magicLinkModel |> Tuple.first
-            --    in
-            --    ( { model | magicLinkModel = magicLinkModel_ }, Cmd.none )
-            --
-            --MagicLink.Types.CancelSignUp ->
-            --    let
-            --        magicLinkModel_ =
-            --            MagicLink.Auth.updateFrontend MagicLink.Types.CancelSignUp model.magicLinkModel |> Tuple.first
             MagicLink.Auth.update authFrontendMsg model.magicLinkModel
                 |> Tuple.mapFirst (\magicLinkModel -> { model | magicLinkModel = magicLinkModel })
 
