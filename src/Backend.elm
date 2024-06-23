@@ -68,15 +68,13 @@ update msg model =
         NoOpBackendMsg ->
             ( model, Cmd.none )
 
+        -- MAGICLINK
         GotAtmosphericRandomNumbers tryRandomAtmosphericNumbers ->
             Atmospheric.gotNumbers model tryRandomAtmosphericNumbers
 
         GotFastTick time ->
-            ( { model | time = time }
-            , Cmd.none
-            )
+            ( { model | time = time }, Cmd.none )
 
-        -- MAGICLINK
         AuthBackendMsg authMsg ->
             Auth.Flow.backendUpdate (MagicLink.Auth.backendConfig model) authMsg
 
