@@ -92,51 +92,44 @@ type FrontendMsg
     | AuthFrontendMsg MagicLink.Types.Msg
     | LiftMsg MagicLink.Types.Msg
     | SignInUser User.SignInData
-      -- ADMIN
     | SetAdminDisplay AdminDisplay
-      --
     | SetRoute_ Route
     | SetViewport
 
 
 type ToBackend
     = ToBackendNoOp
-    | AdminInspect (Maybe User.User)
-    | GetBackendModel
       -- MAGICLINK
+    | GetBackendModel
+    | AdminInspect (Maybe User.User)
     | AuthToBackend Auth.Common.ToBackend
-      -- USER
     | AddUser String String String -- realname, username, email
     | RequestSignup String String String -- realname, username, email
 
 
 type BackendMsg
     = NoOpBackendMsg
+      -- MAGICLINK
     | GotFastTick Time.Posix
     | OnConnected SessionId ClientId
     | GotAtmosphericRandomNumbers (Result Http.Error String)
-      -- MAGICLINK
     | AuthBackendMsg Auth.Common.BackendMsg
-      --
     | AutoLogin SessionId User.SignInData
 
 
 type ToFrontend
     = GotMessage String
-    | AdminInspectResponse BackendModel
       -- MAGICLINK
+    | AdminInspectResponse BackendModel
     | AuthToFrontend Auth.Common.ToFrontend
-      ---
     | AuthSuccess Auth.Common.UserInfo
     | UserInfoMsg (Maybe Auth.Common.UserInfo)
     | CheckSignInResponse (Result BackendDataStatus User.SignInData)
     | GetLoginTokenRateLimited
     | RegistrationError String
     | SignInError String
-      -- USER
     | UserSignedIn (Maybe User.User)
     | UserRegistered User.User
-      -- EXAMPLE
     | GotBackendModel BackendModel
 
 
