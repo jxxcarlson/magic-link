@@ -49,9 +49,9 @@ type alias LoadedModel =
     , authRedirectBaseUrl : Url
     , magicLinkModel : MagicLink.Types.Model
     , adminDisplay : AdminDisplay
-    , backendModel : Maybe BackendModel
     , route : Route
     , message : String
+    , users : Dict.Dict User.EmailString User.User
     }
 
 
@@ -100,8 +100,7 @@ type FrontendMsg
 type ToBackend
     = ToBackendNoOp
       -- MAGICLINK
-    | GetBackendModel
-    | AdminInspect (Maybe User.User)
+    | GetUserDictionary
     | AuthToBackend Auth.Common.ToBackend
     | AddUser String String String -- realname, username, email
     | RequestSignup String String String -- realname, username, email
@@ -120,7 +119,6 @@ type BackendMsg
 type ToFrontend
     = GotMessage String
       -- MAGICLINK
-    | AdminInspectResponse BackendModel
     | AuthToFrontend Auth.Common.ToFrontend
     | AuthSuccess Auth.Common.UserInfo
     | UserInfoMsg (Maybe Auth.Common.UserInfo)
@@ -130,7 +128,7 @@ type ToFrontend
     | SignInError String
     | UserSignedIn (Maybe User.User)
     | UserRegistered User.User
-    | GotBackendModel BackendModel
+    | GotUserDictionary (Dict.Dict User.EmailString User.User)
 
 
 type BackendDataStatus

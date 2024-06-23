@@ -22,24 +22,7 @@ type alias Window =
 view : LoadedModel -> Element FrontendMsg
 view model =
     Element.column []
-        [ Element.row [ Element.spacing 24, Element.paddingEach { left = 0, right = 0, top = 0, bottom = 24 } ]
-            [ View.Button.setAdminDisplay model.adminDisplay ADUser "Users"
-            , View.Button.setAdminDisplay model.adminDisplay ADSession "Sessions"
-            ]
-        , case model.backendModel of
-            Nothing ->
-                text ""
-
-            Just backendModel ->
-                case model.adminDisplay of
-                    ADUser ->
-                        viewUserData model.window backendModel
-
-                    ADSession ->
-                        viewSessions model.window backendModel
-
-                    ADKeyValues ->
-                        viewKeyValuePairs model.window backendModel
+        [ viewUserData model.window model.users
         ]
 
 
@@ -80,13 +63,13 @@ https://elm-kitchen-sink.lamdera.app/_r/getKeyValuePair
         |> MarkdownThemed.renderFull
 
 
-viewUserData : Window -> BackendModel -> Element msg
-viewUserData window backendModel =
+viewUserData : Window -> Dict.Dict User.EmailString User.User -> Element msg
+viewUserData window users =
     column
         [ width fill
         , spacing 12
         ]
-        [ viewUserDictionary window backendModel.users ]
+        [ viewUserDictionary window users ]
 
 
 viewUserDictionary : Window -> Dict.Dict String User.User -> Element msg

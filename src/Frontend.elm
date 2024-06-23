@@ -5,6 +5,7 @@ import Browser exposing (UrlRequest(..))
 import Browser.Dom
 import Browser.Events
 import Browser.Navigation
+import Dict
 import Json.Decode
 import Lamdera
 import MagicLink.Auth
@@ -106,8 +107,8 @@ tryLoading loadingModel =
                         , authRedirectBaseUrl = authRedirectBaseUrl
                         , adminDisplay = ADUser
                         , route = loadingModel.route
-                        , backendModel = Nothing
                         , message = "Starting up ..."
+                        , users = Dict.empty
                         }
                     , Cmd.none
                     )
@@ -166,15 +167,7 @@ updateLoaded msg model =
             ( { model | route = route }, Cmd.none )
 
         SignInUser userData ->
-            let
-                oldMagicLinkModel =
-                    model.magicLinkModel
-            in
-            ( { model
-                | magicLinkModel = { oldMagicLinkModel | currentUserData = Just userData, signInStatus = MagicLink.Types.SignedIn }
-              }
-            , Cmd.none
-            )
+            MagicLink.Frontend.signIn model userData
 
 
 scrollToTop : Cmd FrontendMsg
@@ -200,11 +193,10 @@ updateFromBackendLoaded msg model =
     in
     case msg of
         AuthToFrontend authToFrontendMsg ->
-            MagicLink.Auth.updateFromBackend authToFrontendMsg model.magicLinkModel
-                |> Tuple.mapFirst updateMagicLinkModelInModel
+            MagicLink.Auth.updateFromBackend authToFrontendMsg model.magicLinkModel |> Tuple.mapFirst updateMagicLinkModelInModel
 
-        GotBackendModel beModel ->
-            ( { model | backendModel = Just beModel }, Cmd.none )
+        GotUserDictionary users ->
+            ( { model | users = users }, Cmd.none )
 
         -- MAGICLINK
         AuthSuccess userInfo ->
@@ -263,6 +255,3 @@ updateFromBackendLoaded msg model =
 
         GotMessage message ->
             ( { model | message = message }, Cmd.none )
-
-        AdminInspectResponse backendModel ->
-            ( { model | backendModel = Just backendModel }, Cmd.none )

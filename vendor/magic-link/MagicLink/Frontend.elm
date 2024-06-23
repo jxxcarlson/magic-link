@@ -2,6 +2,7 @@ module MagicLink.Frontend exposing
     ( enterEmail
     , handleRegistrationError
     , handleSignInError
+    , signIn
     , signInWithCode
     , signInWithTokenResponseC
     , signInWithTokenResponseM
@@ -91,10 +92,22 @@ signInWithTokenResponseM signInData model =
 signInWithTokenResponseC : User.SignInData -> Cmd FrontendMsg
 signInWithTokenResponseC signInData =
     if List.member User.AdminRole signInData.roles then
-        Lamdera.sendToBackend GetBackendModel
+        Lamdera.sendToBackend GetUserDictionary
 
     else
         Cmd.none
+
+
+signIn model userData =
+    let
+        oldMagicLinkModel =
+            model.magicLinkModel
+    in
+    ( { model
+        | magicLinkModel = { oldMagicLinkModel | currentUserData = Just userData, signInStatus = MagicLink.Types.SignedIn }
+      }
+    , Cmd.none
+    )
 
 
 signOut : Model -> ( Model, Cmd frontendMsg )

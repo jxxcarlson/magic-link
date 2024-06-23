@@ -31,12 +31,8 @@ init =
       , sessions = Dict.empty
       , sessionInfo = Dict.empty
       , time = Time.millisToPosix 0
-
-      -- kfasdkfd;
       , randomAtmosphericNumbers = Nothing
       , localUuidData = Nothing
-
-      -- MAGICLINK
       , pendingAuths = Dict.empty
       , pendingEmailAuths = Dict.empty
       , secretCounter = 0
@@ -95,8 +91,8 @@ updateFromFrontend sessionId clientId msg model =
         ToBackendNoOp ->
             ( model, Cmd.none )
 
-        GetBackendModel ->
-            ( model, Lamdera.sendToFrontend clientId (GotBackendModel model) )
+        GetUserDictionary ->
+            ( model, Lamdera.sendToFrontend clientId (GotUserDictionary model.users) )
 
         -- MAGICLINK
         AuthToBackend authMsg ->
@@ -107,6 +103,3 @@ updateFromFrontend sessionId clientId msg model =
 
         RequestSignup realname username email ->
             MagicLink.Backend.requestSignUp model clientId realname username email
-
-        AdminInspect maybeUser ->
-            ( model, Lamdera.sendToFrontend clientId (AdminInspectResponse model) )
