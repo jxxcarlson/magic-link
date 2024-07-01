@@ -1,4 +1,4 @@
-# Magic Link
+ # Magic Link
 
 This repo shows how to install magic link authentication in an existing Lamdera app.
 It is still a work-in-progress.
